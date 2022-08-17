@@ -1,6 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+export type BogataGame = {
+  id: string,
+  name: string,
+  minPlayer: number,
+  maxPlayer: number,
+  description: string,
+  playDuration: number,
+  pictures: string[],
+  available: boolean,
+  dateAdded: Date,
+  gameSize: 'small' | 'normal' | 'large',
+  minAge: number,
+  rule: string,
+}
 
 function App() {
   return (
