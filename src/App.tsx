@@ -3,17 +3,21 @@ import './App.css';
 export type GameItem = {
   id: string;
   name: string;
+  description?: string;
   minPlayer: number;
   maxPlayer: number;
-  description: string;
   playDuration: number;
-  pictures: string[];
+  pictures?: string[];
   available: boolean;
-  dateAdded: Date;
+  dateAdded: string;
   gameSize: 'small' | 'normal' | 'large';
+  genre: Genre[],
   minAge: number;
-  rule: string;
+  rule?: string;
+  rating: number;
 };
+
+type Genre = 'Co-op' | 'Action' | 'Survival' | 'Trading' | 'Strategy' | 'Resource Management' | 'RPG' | 'City Building' | 'Detective' // Consider to use enum type
 
 function App() {
   return <div className="App">Welcome to Bogata</div>;
