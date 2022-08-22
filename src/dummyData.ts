@@ -1,6 +1,6 @@
-import { GameItem } from './App';
+import { GameItemType } from './App';
 
-export const gameItemsData: GameItem[] = [
+export const gameItemsData: GameItemType[] = [
   {
     id: '123cfgdf',
     name: 'Zombicide Season 3: Rue Morgue',
@@ -22,6 +22,9 @@ export const gameItemsData: GameItem[] = [
     playDuration: 25,
     available: true,
     dateAdded: '2022/08/18',
+    pictures: [
+      'https://cf.geekdo-images.com/g4XmxyKhNVdhC3QPd1purQ__itemrep/img/QKJwfdV3Qrv9w2TX_ML5T3z5G9E=/fit-in/246x300/filters:strip_icc()/pic3761012.jpg'
+    ],
     gameSize: 'small',
     minAge: 10,
     rating: 7.6,
@@ -35,6 +38,9 @@ export const gameItemsData: GameItem[] = [
     playDuration: 30,
     available: true,
     dateAdded: '2022/08/18',
+    pictures: [
+      'https://cf.geekdo-images.com/rwOMxx4q5yuElIvo-1-OFw__itemrep/img/NaQx3XWoNAOMDGl4AXf4nxlhHo0=/fit-in/246x300/filters:strip_icc()/pic1904079.jpg'
+    ],
     gameSize: 'normal',
     minAge: 10,
     rating: 7.4,
@@ -42,12 +48,15 @@ export const gameItemsData: GameItem[] = [
   },
   {
     id: '90876tg4',
-    name: 'Werewolves: The of Mole Valley',
+    name: 'The Werewolves of Millers Hollow',
     minPlayer: 8,
     maxPlayer: 18,
     playDuration: 30,
     available: false,
     dateAdded: '2022/08/18',
+    pictures: [
+      'https://cf.geekdo-images.com/gBxf-8tL9SnYglYY7dEpJA__itemrep/img/RoN7S0zn-8aW1MfeDtxGklUNuIM=/fit-in/246x300/filters:strip_icc()/pic510856.jpg'
+    ],
     gameSize: 'small',
     minAge: 10,
     rating: 6.5,
@@ -61,11 +70,13 @@ export const gameItemsData: GameItem[] = [
     maxPlayer: 4,
     playDuration: 45,
     available: false,
+    pictures: [
+      'https://cf.geekdo-images.com/GfAD5PEzWri3m_x_r7a_Ww__itemrep/img/K5G3PLYhBYuIrRKsrF1RtwXv69Y=/fit-in/246x300/filters:strip_icc()/pic4781099.jpg'
+    ],
     dateAdded: '2022/08/18',
     gameSize: 'normal',
     minAge: 8,
     rating: 7.0,
     genre: ['Detective']
-  },
+  }
 ];
-
