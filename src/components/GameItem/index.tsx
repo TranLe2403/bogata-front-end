@@ -47,6 +47,7 @@ function GameItem({ data }: { data: GameItemType }) {
   return (
     <GameItemContainer>
       <ImageStyle
+        data-testid="game-image"
         src={
           data.pictures !== undefined
             ? data.pictures[0]

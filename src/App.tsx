@@ -26,7 +26,7 @@ const AppStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const GameListStyle = styled.div`
   padding: 32px;
@@ -34,7 +34,7 @@ const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`
+`;
 
 type Genre =
   | 'Co-op'
@@ -50,7 +50,7 @@ type Genre =
 const App = () => {
   return (
     <AppStyle>
-      <GameListStyle>
+      <GameListStyle data-testid="game-list">
         {gameItemsData
           .filter((game) => game.available)
           .map((item) => (
