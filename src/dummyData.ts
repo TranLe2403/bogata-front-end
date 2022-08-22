@@ -52,7 +52,7 @@ export const gameItemsData: GameItemType[] = [
     minPlayer: 8,
     maxPlayer: 18,
     playDuration: 30,
-    available: false,
+    available: true,
     dateAdded: '2022/08/18',
     pictures: [
       'https://cf.geekdo-images.com/gBxf-8tL9SnYglYY7dEpJA__itemrep/img/RoN7S0zn-8aW1MfeDtxGklUNuIM=/fit-in/246x300/filters:strip_icc()/pic510856.jpg'
@@ -69,7 +69,7 @@ export const gameItemsData: GameItemType[] = [
     minPlayer: 1,
     maxPlayer: 4,
     playDuration: 45,
-    available: false,
+    available: true,
     pictures: [
       'https://cf.geekdo-images.com/GfAD5PEzWri3m_x_r7a_Ww__itemrep/img/K5G3PLYhBYuIrRKsrF1RtwXv69Y=/fit-in/246x300/filters:strip_icc()/pic4781099.jpg'
     ],
