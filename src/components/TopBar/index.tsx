@@ -62,9 +62,15 @@ function TopBar({ setSearchValue, searchValue, searchHandler }: PropsType) {
   return (
     <TopBarContainer>
       <InputWrapper onSubmit={searchHandler}>
-        <SearchInputStyle type="text" value={searchValue} onChange={onChangeHandler} />
+        <SearchInputStyle
+          data-testid="search-bar"
+          placeholder="Let's find some games"
+          type="text"
+          value={searchValue}
+          onChange={onChangeHandler}
+        />
         <MinimumBlock />
-        <AccessoryContainer onClick={searchHandler}>
+        <AccessoryContainer data-testid="search-icon" onClick={searchHandler}>
           <AccessoryStyle src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Search_Icon.svg/1024px-Search_Icon.svg.png" />
         </AccessoryContainer>
       </InputWrapper>
