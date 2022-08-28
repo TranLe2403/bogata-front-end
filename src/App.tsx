@@ -58,7 +58,9 @@ const App = () => {
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const filtedSearchResult = gameItemsData.filter((item) => item.name.includes(searchValue));
+    const filtedSearchResult = gameItemsData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
     setSearchResult(filtedSearchResult);
   };
 

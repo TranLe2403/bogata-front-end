@@ -20,12 +20,12 @@ const InputWrapper = styled.form`
 const SearchInputStyle = styled.input`
   position: absolute;
   height: calc(100% - 2px);
-  width: calc(100% - 2px);
+  width: calc(100% - 18px);
   border-radius: 4px;
   display: flex;
   border: 1px solid #d7d7d7;
   outline: none;
-  padding: 0;
+  padding: 0 0 0 16px;
 `;
 const AccessoryContainer = styled.div`
   width: 64px;
@@ -38,6 +38,7 @@ const AccessoryContainer = styled.div`
 const MinimumBlock = styled.div`
   min-width: 64px;
   flex: 1;
+  padding-left: 16px;
 `;
 
 const AccessoryStyle = styled.img`
