@@ -5,7 +5,7 @@ const TopBarContainer = styled.div`
   width: 100%;
   height: 40px;
   background: #f0f0f0;
-  padding: 16px 32px;
+  padding: 16px 0;
   display: flex;
   justify-content: center;
 `;
