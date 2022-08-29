@@ -8,6 +8,8 @@ const TopBarContainer = styled.div`
   padding: 16px 0;
   display: flex;
   justify-content: center;
+  position: fixed;
+  top: 0;
 `;
 
 const InputWrapper = styled.form`

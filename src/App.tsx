@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
-import './App.css';
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
@@ -37,6 +36,7 @@ const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 72px;
 `;
 
 type Genre =
