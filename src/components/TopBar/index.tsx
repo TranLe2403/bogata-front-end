@@ -18,6 +18,11 @@ const InputWrapper = styled.form`
   position: relative;
   width: 40%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 32px);
+  }
+
 `;
 
 const SearchInputStyle = styled.input`
