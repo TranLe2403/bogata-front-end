@@ -58,7 +58,7 @@ interface PropsType {
   ) => void;
 }
 
-function TopBar({ setSearchValue, searchValue, searchHandler }: PropsType) {
+const TopBar = ({ setSearchValue, searchValue, searchHandler }: PropsType) => {
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };

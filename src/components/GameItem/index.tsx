@@ -44,7 +44,7 @@ const RatingContainer = styled.div`
   gap: 8px;
 `;
 
-function GameItem({ data }: { data: GameItemType }) {
+const GameItem = ({ data }: { data: GameItemType }) => {
   return (
     <GameItemContainer>
       <ImageStyle
