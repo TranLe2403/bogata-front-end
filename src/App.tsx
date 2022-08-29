@@ -52,7 +52,7 @@ type Genre =
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [searchResult, setSearchResult] = useState<GameItemType[]>(gameItemsData);
+  const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
 
   const searchHandler = (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -61,7 +61,7 @@ const App = () => {
     const filtedSearchResult = gameItemsData.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
-    setSearchResult(filtedSearchResult);
+    setGameItems(filtedSearchResult);
   };
 
   return (
@@ -73,7 +73,7 @@ const App = () => {
       />
       <AppStyle>
         <GameListStyle data-testid="game-list">
-          {searchResult
+          {gameItems
             .filter((game) => game.available)
             .map((item) => (
               <GameItem key={item.id} data={item} />
