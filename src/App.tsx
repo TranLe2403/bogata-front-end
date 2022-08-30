@@ -1,7 +1,9 @@
-import './App.css';
+import React, { useState } from 'react';
+import styled from '@emotion/styled';
+
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
-import styled from '@emotion/styled';
+import TopBar from './components/TopBar';
 
 export interface GameItemType {
   id: string;
@@ -34,6 +36,7 @@ const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 72px;
 `;
 
 type Genre =
@@ -48,16 +51,36 @@ type Genre =
   | 'Detective'; // Consider to use enum type
 
 const App = () => {
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
+
+  const searchHandler = (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    const filtedSearchResult = gameItemsData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setGameItems(filtedSearchResult);
+  };
+
   return (
-    <AppStyle>
-      <GameListStyle data-testid="game-list">
-        {gameItemsData
-          .filter((game) => game.available)
-          .map((item) => (
-            <GameItem key={item.id} data={item} />
-          ))}
-      </GameListStyle>
-    </AppStyle>
+    <>
+      <TopBar
+        setSearchValue={setSearchValue}
+        searchValue={searchValue}
+        searchHandler={searchHandler}
+      />
+      <AppStyle>
+        <GameListStyle data-testid="game-list">
+          {gameItems
+            .filter((game) => game.available)
+            .map((item) => (
+              <GameItem key={item.id} data={item} />
+            ))}
+        </GameListStyle>
+      </AppStyle>
+    </>
   );
 };
 
