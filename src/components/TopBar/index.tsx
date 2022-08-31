@@ -5,9 +5,12 @@ const TopBarContainer = styled.div`
   width: 100%;
   height: 40px;
   background: #f0f0f0;
-  padding: 16px 32px;
+  padding: 16px 0;
   display: flex;
   justify-content: center;
+  position: fixed;
+  top: 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
 `;
 
 const InputWrapper = styled.form`
@@ -15,17 +18,22 @@ const InputWrapper = styled.form`
   position: relative;
   width: 40%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 32px);
+  }
+
 `;
 
 const SearchInputStyle = styled.input`
   position: absolute;
   height: calc(100% - 2px);
-  width: calc(100% - 2px);
+  width: calc(100% - 18px);
   border-radius: 4px;
   display: flex;
   border: 1px solid #d7d7d7;
   outline: none;
-  padding: 0;
+  padding: 0 0 0 16px;
 `;
 const AccessoryContainer = styled.div`
   width: 64px;
@@ -38,6 +46,7 @@ const AccessoryContainer = styled.div`
 const MinimumBlock = styled.div`
   min-width: 64px;
   flex: 1;
+  padding-left: 16px;
 `;
 
 const AccessoryStyle = styled.img`
@@ -54,7 +63,7 @@ interface PropsType {
   ) => void;
 }
 
-function TopBar({ setSearchValue, searchValue, searchHandler }: PropsType) {
+const TopBar = ({ setSearchValue, searchValue, searchHandler }: PropsType) => {
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };

@@ -8,6 +8,7 @@ const GameItemContainer = styled.div`
   display: flex;
   gap: 16px;
   border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
 `;
 
 const ImageStyle = styled.img`
@@ -43,7 +44,7 @@ const RatingContainer = styled.div`
   gap: 8px;
 `;
 
-function GameItem({ data }: { data: GameItemType }) {
+const GameItem = ({ data }: { data: GameItemType }) => {
   return (
     <GameItemContainer>
       <ImageStyle
