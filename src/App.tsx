@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
+import Login from './components/Login';
 
 export interface GameItemType {
   id: string;
@@ -23,7 +23,7 @@ export interface GameItemType {
   rating: number;
 }
 
- interface UserInfo {
+export interface UserInfo {
   email: string;
   name: string;
   picture: string;
@@ -86,40 +86,8 @@ const App = () => {
 
   const searchHandler = (e: EventType) => {
     e.preventDefault();
-    const filtedSearchResult = gameItemsData.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    const filtedSearchResult = gameItemsData.filter((item) => item.name.includes(searchValue));
     setGameItems(filtedSearchResult);
-  };
-
-  useEffect(() => {
-    // @ts-expect-error
-    const google = window.google;
-    google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: handleCallbackResponse
-    });
-    google.accounts.id.renderButton(document.getElementById('signInDiv'), {
-      theme: 'outline',
-      size: 'large'
-    });
-  }, []);
-
-  const setSignInButtonHidden = (hidden: boolean = false) => {
-    const getElem = document.getElementById('signInDiv');
-    if (getElem === null) return;
-    getElem.hidden = hidden;
-  };
-
-  const handleCallbackResponse = (res: Record<string, string>) => {
-    const { email, name, picture }: Record<string, string> = jwtDecode(res.credential);
-    setUser({ email, name, picture });
-    setSignInButtonHidden(true);
-  };
-
-  const handleSignOut = () => {
-    setUser({ email: '', name: '', picture: '' });
-    setSignInButtonHidden();
   };
 
   const userClickHandler = () => {
@@ -145,7 +113,16 @@ const App = () => {
           onClick={userClickHandler}
         />
       )}
-      
+
+      {showLogin && (
+        <Login
+          email={user.email}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          setUser={setUser}
+        />
+      )}
+
       <AppStyle>
         <GameListStyle data-testid="game-list">
           {gameItems
