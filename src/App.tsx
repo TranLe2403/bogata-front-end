@@ -23,7 +23,7 @@ export interface GameItemType {
   rating: number;
 }
 
-interface UserInfo {
+ interface UserInfo {
   email: string;
   name: string;
   picture: string;
@@ -59,10 +59,30 @@ const GameListStyle = styled.div`
   margin-top: 72px;
 `;
 
+const UserDefaultImage = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: red;
+  position: fixed;
+  right: 32px;
+  top: 16px;
+  z-index: 2;
+`;
+
+const UserImage = styled.img`
+  border-radius: 20px;
+  position: fixed;
+  right: 32px;
+  top: 16px;
+  z-index: 2;
+`;
+
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
   const [user, setUser] = useState<UserInfo>({ email: '', name: '', picture: '' });
+  const [showLogin, setShowLogin] = useState<boolean>(false);
 
   const searchHandler = (e: EventType) => {
     e.preventDefault();
@@ -102,16 +122,30 @@ const App = () => {
     setSignInButtonHidden();
   };
 
+  const userClickHandler = () => {
+    setShowLogin(!showLogin);
+  };
+
   return (
     <>
-      {user.email === '' ? <div>Login</div> : <div onClick={handleSignOut}>Logout</div>}
-      <div id="signInDiv"></div>
-
       <TopBar
         setSearchValue={setSearchValue}
         searchValue={searchValue}
         searchHandler={searchHandler}
       />
+
+      {user.picture === '' ? (
+        <UserDefaultImage onClick={userClickHandler}></UserDefaultImage>
+      ) : (
+        <UserImage
+          src={user.picture}
+          alt={user.name}
+          width={40}
+          height={40}
+          onClick={userClickHandler}
+        />
+      )}
+      
       <AppStyle>
         <GameListStyle data-testid="game-list">
           {gameItems
