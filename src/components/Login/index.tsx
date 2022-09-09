@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { UserInfo } from '../../App';
 
-interface Props {
+interface PropTypes {
   email: string;
   setUser: React.Dispatch<React.SetStateAction<UserInfo>>;
   showLogin: boolean;
@@ -32,7 +32,7 @@ const SignInContainer = styled.div`
   gap: 32px;
 `;
 
-const Login = ({ email, setUser, showLogin, setShowLogin }: Props) => {
+const Login = ({ email, setUser, showLogin, setShowLogin }: PropTypes) => {
   useEffect(() => {
     // @ts-expect-error
     const google = window.google;

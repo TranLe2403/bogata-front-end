@@ -48,15 +48,17 @@ const AppStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  top: 104px;
 `;
 
 const GameListStyle = styled.div`
-  padding: 32px;
-  width: 100%;
+  width: calc(100% - 64px);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 72px;
+  position: absolute;
+  top: 0;
 `;
 
 const UserDefaultImage = styled.div`
@@ -80,14 +82,14 @@ const UserImage = styled.img`
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
+  const [searchResult, setSearchResult] = useState<GameItemType[]>(gameItemsData);
   const [user, setUser] = useState<UserInfo>({ email: '', name: '', picture: '' });
   const [showLogin, setShowLogin] = useState<boolean>(false);
 
   const searchHandler = (e: EventType) => {
     e.preventDefault();
     const filtedSearchResult = gameItemsData.filter((item) => item.name.includes(searchValue));
-    setGameItems(filtedSearchResult);
+    setSearchResult(filtedSearchResult);
   };
 
   const userClickHandler = () => {
@@ -125,7 +127,7 @@ const App = () => {
 
       <AppStyle>
         <GameListStyle data-testid="game-list">
-          {gameItems
+          {searchResult
             .filter((game) => game.available)
             .map((item) => (
               <GameItem key={item.id} data={item} />

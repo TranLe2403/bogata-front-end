@@ -11,6 +11,7 @@ const TopBarContainer = styled.div`
   position: fixed;
   top: 0;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
+  z-index: 2;
 `;
 
 const InputWrapper = styled.form`
@@ -22,7 +23,6 @@ const InputWrapper = styled.form`
   @media (max-width: 768px) {
     width: calc(100% - 32px);
   }
-
 `;
 
 const SearchInputStyle = styled.input`
@@ -85,6 +85,6 @@ const TopBar = ({ setSearchValue, searchValue, searchHandler }: PropsType) => {
       </InputWrapper>
     </TopBarContainer>
   );
-}
+};
 
 export default TopBar;
