@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
@@ -36,7 +38,24 @@ const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 72px;
+`;
+
+const FilterButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 88px 32px 0 0;
+`;
+
+const FilterButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const FilterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 16px;
 `;
 
 type Genre =
@@ -53,6 +72,7 @@ type Genre =
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
+  const [filterBarShown, setFilterBarShown] = useState<boolean>(false);
 
   const searchHandler = (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -71,6 +91,18 @@ const App = () => {
         searchValue={searchValue}
         searchHandler={searchHandler}
       />
+      
+      <FilterButtonContainer>
+        <FilterButton
+          onClick={() => {
+            setFilterBarShown(!filterBarShown);
+          }}
+        >
+          Filter {filterBarShown ? <FilterAltOffIcon /> : <FilterAltIcon />}
+        </FilterButton>
+      </FilterButtonContainer>
+      {filterBarShown && <FilterContainer></FilterContainer>}
+
       <AppStyle>
         <GameListStyle data-testid="game-list">
           {gameItems
