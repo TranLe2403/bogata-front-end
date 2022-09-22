@@ -31,6 +31,9 @@ const SliderThumb = styled.div`
 `;
 
 const CustomSlider = ({ min, max }: { min: number; max: number }) => {
+  const [fromValue, setFromValue] = useState<number>(0);
+  const [toValue, setToValue] = useState<number>(0);
+  const [dragging, setDragging] = useState<boolean>(false);
   const [trackState, setTrackState] = useState({
     startX: 0,
     endX: 0,
@@ -38,16 +41,22 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     pivotValue: 0,
     topSide: true
   });
-  const [fromValue, setFromValue] = useState<number>(0);
-  const [toValue, setToValue] = useState<number>(0);
-  const [dragging, setDragging] = useState<boolean>(false);
-  useEffect(() => {
-    setFromValue(min);
-  }, [min]);
 
   useEffect(() => {
+    setFromValue(min);
     setToValue(max);
-  }, [max]);
+    setStartAndEndValues()
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onMoveEnd);
+
+    return () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onMoveEnd);
+    };  
+  }, [dragging]);  
 
   const fromThumbEl = useRef(null);
   const toThumbEl = useRef(null);
@@ -58,42 +67,49 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     return fromThumbEl.current;
   };
 
+  const setStartAndEndValues = () => {
+    const trackSelector = document.querySelector('#track');
+    if (trackSelector === null) return;
+    const { width, left } = trackSelector.getBoundingClientRect();
+    setTrackState({ ...trackState, startX: left, endX: width + left });
+  }
+
+  const valueBetweenMinMax = (value: number) => {
+    return Math.min(Math.max(value, min), max);
+  }
+
   const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
     const target = e.target as HTMLDivElement;
-    
-    if (toThumbEl === null || fromThumbEl === null || target === null) return;    
-    const trackSelector = document.querySelector('#track');
-    if (trackSelector === null) return;
-    const { width, left } = trackSelector.getBoundingClientRect();
+    if (toThumbEl === null || fromThumbEl === null || target === null) return;
+
+    setStartAndEndValues()
+
     const { left: startThumbLeft } = target.getBoundingClientRect();
     const startPercentage = getXPercentage(startThumbLeft + 8);
     const otherThumb = getOtherThumbEl(target);
-    console.log(target, otherThumb);
-    
     const pivot =
-    otherThumb !== e.target ? getXPercentage(otherThumb.getBoundingClientRect().left + 8) : 0;
-    const topSide = startPercentage >= pivot;    
+      otherThumb !== e.target ? getXPercentage(otherThumb.getBoundingClientRect().left + 8) : 0;
+    const topSide = startPercentage >= pivot;
     setTrackState({
-      startX: left,
-      endX: width + left,
+      ...trackState,
       topSide,
       pivotValue: setValue(topSide),
       pivotPercentage: pivot
     });
-    
+
     setDragging(true);
   };
 
   const getXPercentage = (x: number) => {
-    const { startX, endX } = trackState;    
-    const value = (100 * (x - startX)) / (endX - startX)
-    return Math.min(Math.max(value,0), 100);
+    const { startX, endX } = trackState;
+    const value = (100 * (x - startX)) / (endX - startX);
+    return valueBetweenMinMax(value);
   };
 
-  const onMove = (e: MouseEvent) => {    
-    if (!dragging) return;    
+  const onMove = (e: MouseEvent) => {
+    if (!dragging) return;
     const xMouseEventValue = e.x ?? e.clientX ?? 0;
     const percent = getXPercentage(xMouseEventValue);
     const value = getValueFromPercentage(percent);
@@ -106,33 +122,16 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
 
   const getValueFromPercentage = (percent: number) => {
     const value = Math.abs(max - min) * (percent / 100) + min;
-    return Math.min(Math.max(value, min), max);
+    return valueBetweenMinMax(value);
   };
 
   const onMoveEnd = () => {
     setDragging(false);
   };
 
-  useEffect(() => {    
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onMoveEnd);
-
-    return () => {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onMoveEnd);
-    };
-  }, [dragging]);
-
   const setValue = (isFrom: boolean) => {
-    return Math.min(Math.max((isFrom ? fromValue:toValue) ?? min, min), max);
-  }
-
-  // const getFromValue = () => {    
-  // };
-
-  // const getToValue = () => {    
-  //   return Math.min(Math.max(toValue ?? min, min), max);
-  // };
+    return valueBetweenMinMax((isFrom ? fromValue : toValue) ?? min)
+  };
 
   const getBarPercentage = (value: number) => {
     return (100 * (value - min)) / Math.abs(max - min);
@@ -142,7 +141,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     <SliderTrack id="track">
       <SliderBar
         style={{
-          right: `${100- getBarPercentage(setValue(false))}%`,
+          right: `${100 - getBarPercentage(setValue(false))}%`,
           left: `${getBarPercentage(setValue(true))}%`
         }}
       ></SliderBar>
