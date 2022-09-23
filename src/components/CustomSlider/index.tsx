@@ -89,8 +89,8 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     const { left: startThumbLeft } = target.getBoundingClientRect();
     const startPercentage = getXPercentage(startThumbLeft + 8);
     const otherThumb = getOtherThumbEl(target);
-    const pivot =
-      otherThumb !== e.target ? getXPercentage(otherThumb.getBoundingClientRect().left + 8) : 0;
+    const { left: otherThumbLeft } = otherThumb.getBoundingClientRect();
+    const pivot = otherThumb !== target ? getXPercentage(otherThumbLeft + 8) : 0;
     const topSide = startPercentage >= pivot;
     setTrackState({
       ...trackState,

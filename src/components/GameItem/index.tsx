@@ -68,6 +68,6 @@ const GameItem = ({ data }: { data: GameItemType }) => {
       </RatingContainer>
     </GameItemContainer>
   );
-}
+};
 
 export default GameItem;
