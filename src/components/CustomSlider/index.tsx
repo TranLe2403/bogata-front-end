@@ -60,6 +60,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
 
   const fromThumbEl = useRef(null);
   const toThumbEl = useRef(null);
+  const trackEl = useRef(null);
 
   const getOtherThumbEl = (target: HTMLDivElement): HTMLDivElement => {
     if (toThumbEl.current === null || fromThumbEl.current === null) return target;
@@ -68,9 +69,8 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   };
 
   const setStartAndEndValues = () => {
-    const trackSelector = document.querySelector('#track');
-    if (trackSelector === null) return;
-    const { width, left } = trackSelector.getBoundingClientRect();
+    if (trackEl.current === null) return;
+    const { width, left } = (trackEl.current as HTMLDivElement).getBoundingClientRect();
     setTrackState({ ...trackState, startX: left, endX: width + left });
   };
 
@@ -146,7 +146,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   };
 
   return (
-    <SliderTrack id="track" onClick={onClickHandler}>
+    <SliderTrack id="track" ref={trackEl} onClick={onClickHandler}>
       <SliderBar
         style={{
           right: `${100 - getBarPercentage(setValue(false))}%`,
