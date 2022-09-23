@@ -45,7 +45,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   useEffect(() => {
     setFromValue(min);
     setToValue(max);
-    setStartAndEndValues()
+    setStartAndEndValues();
   }, []);
 
   useEffect(() => {
@@ -55,8 +55,8 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     return () => {
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onMoveEnd);
-    };  
-  }, [dragging]);  
+    };
+  }, [dragging]);
 
   const fromThumbEl = useRef(null);
   const toThumbEl = useRef(null);
@@ -72,11 +72,11 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     if (trackSelector === null) return;
     const { width, left } = trackSelector.getBoundingClientRect();
     setTrackState({ ...trackState, startX: left, endX: width + left });
-  }
+  };
 
   const valueBetweenMinMax = (value: number) => {
     return Math.min(Math.max(value, min), max);
-  }
+  };
 
   const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
@@ -84,7 +84,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     const target = e.target as HTMLDivElement;
     if (toThumbEl === null || fromThumbEl === null || target === null) return;
 
-    setStartAndEndValues()
+    setStartAndEndValues();
 
     const { left: startThumbLeft } = target.getBoundingClientRect();
     const startPercentage = getXPercentage(startThumbLeft + 8);
@@ -113,11 +113,10 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     const xMouseEventValue = e.x ?? e.clientX ?? 0;
     const percent = getXPercentage(xMouseEventValue);
     const value = getValueFromPercentage(percent);
-    const topSide = percent >= trackState.pivotPercentage;
-    const to = topSide ? value : trackState.pivotValue;
-    const from = !topSide ? value : trackState.pivotValue;
-    setToValue(to);
-    setFromValue(from);
+    const { pivotValue, pivotPercentage } = trackState;
+    const topSide = percent >= pivotPercentage;
+    setToValue(topSide ? value : pivotValue);
+    setFromValue(topSide ? pivotValue : value);
   };
 
   const getValueFromPercentage = (percent: number) => {
@@ -130,15 +129,24 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   };
 
   const setValue = (isFrom: boolean) => {
-    return valueBetweenMinMax((isFrom ? fromValue : toValue) ?? min)
+    return valueBetweenMinMax((isFrom ? fromValue : toValue) ?? min);
   };
 
   const getBarPercentage = (value: number) => {
     return (100 * (value - min)) / Math.abs(max - min);
   };
 
+  const onClickHandler = (e: React.MouseEvent<HTMLElement>) => {
+    if (dragging) return;
+    setStartAndEndValues();
+    const value = getValueFromPercentage(getXPercentage(e.clientX ?? 0));
+    const topSide = Math.abs(value - toValue) <= Math.abs(value - fromValue);
+    setToValue(topSide ? value : toValue);
+    setFromValue(topSide ? fromValue : value);
+  };
+
   return (
-    <SliderTrack id="track">
+    <SliderTrack id="track" onClick={onClickHandler}>
       <SliderBar
         style={{
           right: `${100 - getBarPercentage(setValue(false))}%`,
