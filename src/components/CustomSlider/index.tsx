@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
+const SliderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 const SliderTrack = styled.div`
   cursor: pointer;
   position: relative;
@@ -29,6 +35,14 @@ const SliderThumb = styled.div`
   background-color: red;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
 `;
+
+const ValueWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  min-width: 32px;
+`
 
 const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   const [fromValue, setFromValue] = useState<number>(0);
@@ -145,25 +159,37 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     setFromValue(topSide ? fromValue : value);
   };
 
+  const renderValues = (value: number) => {
+    return (
+      <ValueWrapper>
+        <p>{value.toFixed()}</p>
+      </ValueWrapper>
+    );
+  };
+
   return (
-    <SliderTrack id="track" ref={trackEl} onClick={onClickHandler}>
-      <SliderBar
-        style={{
-          right: `${100 - getBarPercentage(setValue(false))}%`,
-          left: `${getBarPercentage(setValue(true))}%`
-        }}
-      ></SliderBar>
-      <SliderThumb
-        ref={toThumbEl}
-        style={{ left: `${getBarPercentage(setValue(false))}%` }}
-        onMouseDown={startDrag}
-      />
-      <SliderThumb
-        ref={fromThumbEl}
-        style={{ left: `${getBarPercentage(setValue(true))}%` }}
-        onMouseDown={startDrag}
-      />
-    </SliderTrack>
+    <SliderContainer>
+      {renderValues(fromValue)}
+      <SliderTrack id="track" ref={trackEl} onClick={onClickHandler}>
+        <SliderBar
+          style={{
+            right: `${100 - getBarPercentage(setValue(false))}%`,
+            left: `${getBarPercentage(setValue(true))}%`
+          }}
+        ></SliderBar>
+        <SliderThumb
+          ref={toThumbEl}
+          style={{ left: `${getBarPercentage(setValue(false))}%` }}
+          onMouseDown={startDrag}
+        />
+        <SliderThumb
+          ref={fromThumbEl}
+          style={{ left: `${getBarPercentage(setValue(true))}%` }}
+          onMouseDown={startDrag}
+        />
+      </SliderTrack>
+      {renderValues(toValue)}
+    </SliderContainer>
   );
 };
 
