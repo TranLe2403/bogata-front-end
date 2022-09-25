@@ -53,7 +53,6 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     endX: 0,
     pivotPercentage: 0,
     pivotValue: 0,
-    topSide: true
   });
 
   useEffect(() => {
@@ -108,7 +107,6 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     const topSide = startPercentage >= pivot;
     setTrackState({
       ...trackState,
-      topSide,
       pivotValue: setValue(topSide),
       pivotPercentage: pivot
     });
