@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
+import CustomSlider from './components/CustomSlider';
 
 export interface GameItemType {
   id: string;
@@ -36,7 +37,6 @@ const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 72px;
 `;
 
 type Genre =
@@ -71,6 +71,7 @@ const App = () => {
         searchValue={searchValue}
         searchHandler={searchHandler}
       />
+
       <AppStyle>
         <GameListStyle data-testid="game-list">
           {gameItems

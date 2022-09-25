@@ -22,7 +22,6 @@ const InputWrapper = styled.form`
   @media (max-width: 768px) {
     width: calc(100% - 32px);
   }
-
 `;
 
 const SearchInputStyle = styled.input`
@@ -85,6 +84,6 @@ const TopBar = ({ setSearchValue, searchValue, searchHandler }: PropsType) => {
       </InputWrapper>
     </TopBarContainer>
   );
-}
+};
 
 export default TopBar;
