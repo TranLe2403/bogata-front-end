@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -70,6 +70,22 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [options, setOptions] = useState<string[]>([]);
 
+  const dropdownOptionsEl = useRef(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownOptionsEl.current === null || event.target === null) return;
+    if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
+      return;
+    setOpenDropdown(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOptionsEl]);
+
   const dropdownClickHandler = () => {
     setOpenDropdown(!openDropdown);
   };
@@ -104,7 +120,7 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
         </DropdownIcon>
       </DropdownInputContainer>
 
-      <DropdownOptionsContainer open={openDropdown}>
+      <DropdownOptionsContainer open={openDropdown} ref={dropdownOptionsEl}>
         {data.map((item) => (
           <DropdownOptionContainer
             key={item}
