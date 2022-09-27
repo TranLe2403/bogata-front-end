@@ -66,6 +66,18 @@ const DropdownIcon = styled.div`
   height: 40px;
 `;
 
+const SelectedItem = styled.div`
+  width: fit-content;
+  min-width: 32px;
+  border-radius: 12px;
+  background-color: #e1f0ff;
+  padding: 4px 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const FilterDropdown = ({ data }: { data: string[] }) => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const [options, setOptions] = useState<string[]>([]);
@@ -112,7 +124,7 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
       <DropdownInputContainer onClick={dropdownClickHandler}>
         <DropdownContent>
           {options.map((item) => (
-            <p key={item}>{item}</p>
+            <SelectedItem key={item}>{item}</SelectedItem>
           ))}
         </DropdownContent>
         <DropdownIcon>
