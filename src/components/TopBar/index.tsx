@@ -11,6 +11,7 @@ const TopBarContainer = styled.div`
   position: fixed;
   top: 0;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
+  z-index: 2;
 `;
 
 const InputWrapper = styled.form`
