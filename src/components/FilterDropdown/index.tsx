@@ -78,18 +78,23 @@ const SelectedItem = styled.div`
   text-overflow: ellipsis;
 `;
 
-const FilterDropdown = ({ data }: { data: string[] }) => {
-    const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-    const [options, setOptions] = useState<string[]>([]);
-  
-    const dropdownOptionsEl = useRef(null);
-  
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownOptionsEl.current === null || event.target === null) return;
-      if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
-        return;
-      setOpenDropdown(false);
-    };
+interface PropsType {
+  data: string[];
+  options: string[];
+  setOptions: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
+  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+
+  const dropdownOptionsEl = useRef(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownOptionsEl.current === null || event.target === null) return;
+    if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
+      return;
+    setOpenDropdown(false);
+  };
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
