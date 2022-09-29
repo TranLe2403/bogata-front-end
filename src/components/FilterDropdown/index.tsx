@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -88,11 +88,14 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
 
   const dropdownOptionsEl = useRef(null);
+  const dropdownInputEl = useRef(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownOptionsEl.current === null || event.target === null) return;
-    if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
-      return;
+    const target = event.target as HTMLDivElement;
+    const currentOptions = dropdownOptionsEl.current as HTMLDivElement | null;
+    const currentDropdownInput = dropdownInputEl.current as HTMLDivElement | null;
+    if (currentOptions === null || currentDropdownInput === null || target === null) return;
+    if (currentOptions.contains(target) || currentDropdownInput.contains(target)) return;
     setOpenDropdown(false);
   };
 
@@ -103,17 +106,10 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
     };
   }, [dropdownOptionsEl]);
 
-  const dropdownClickHandler = () => {
+  const dropdownClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     setOpenDropdown(!openDropdown);
-  };
-
-  const optionCheckHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const copyOptions = [...options];
-    const { checked, value } = e.target;
-    const newArr = checked
-      ? copyOptions.concat(value)
-      : copyOptions.filter((option) => option !== value);
-    setOptions(newArr);
   };
 
   const onClickOptionHandler = (item: string) => {
@@ -126,7 +122,7 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
 
   return (
     <div style={{ position: 'relative', maxHeight: 'fit-content' }}>
-      <DropdownInputContainer onClick={dropdownClickHandler}>
+      <DropdownInputContainer ref={dropdownInputEl} onClick={dropdownClickHandler}>
         <DropdownContent>
           {options.map((item) => (
             <SelectedItem key={item}>{item}</SelectedItem>
