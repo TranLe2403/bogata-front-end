@@ -28,7 +28,7 @@ const DropdownOptionsContainer = styled.div<{ open: boolean }>`
   display: flex;
   flex-direction: column;
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   max-height: ${(props) => (props.open ? '256px' : '0')};
   overflow: auto;
   margin-top: 2px;
@@ -44,7 +44,6 @@ const DropdownOptionContainer = styled.div<{ active: boolean }>`
   position: relative;
   align-items: center;
   max-width: 100%;
-  border-radius: 4px;
   padding: 0 16px;
   height: 40px;
   border: none;
@@ -79,18 +78,18 @@ const SelectedItem = styled.div`
 `;
 
 const FilterDropdown = ({ data }: { data: string[] }) => {
-  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-  const [options, setOptions] = useState<string[]>([]);
-
-  const dropdownOptionsEl = useRef(null);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownOptionsEl.current === null || event.target === null) return;
-    if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
-      return;
-    setOpenDropdown(false);
-  };
-
+    const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+    const [options, setOptions] = useState<string[]>([]);
+  
+    const dropdownOptionsEl = useRef(null);
+  
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownOptionsEl.current === null || event.target === null) return;
+      if ((dropdownOptionsEl.current as HTMLDivElement).contains(event.target as HTMLDivElement))
+        return;
+      setOpenDropdown(false);
+    };
+  
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -120,7 +119,7 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
   };
 
   return (
-    <div style={{ position: 'relative', width: 384, maxHeight: 'fit-content' }}>
+    <div style={{ position: 'relative', maxHeight: 'fit-content' }}>
       <DropdownInputContainer onClick={dropdownClickHandler}>
         <DropdownContent>
           {options.map((item) => (
