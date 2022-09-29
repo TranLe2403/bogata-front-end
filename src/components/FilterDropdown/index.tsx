@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const DropdownInputContainer = styled.div`
   background-color: white;
@@ -89,7 +90,7 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
         return;
       setOpenDropdown(false);
     };
-  
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -138,13 +139,8 @@ const FilterDropdown = ({ data }: { data: string[] }) => {
             active={options.includes(item)}
             onClick={() => onClickOptionHandler(item)}
           >
-            <input
-              type="checkbox"
-              value={item}
-              checked={options.includes(item)}
-              onChange={optionCheckHandler}
-            />
-            <p>{item}</p>
+            <p style={{ flex: 1 }}>{item}</p>
+            {options.includes(item) && <CheckCircleIcon fontSize="small" />}
           </DropdownOptionContainer>
         ))}
       </DropdownOptionsContainer>
