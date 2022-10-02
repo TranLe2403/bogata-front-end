@@ -42,7 +42,7 @@ const ValueWrapper = styled.div`
   align-items: center;
   height: 16px;
   min-width: 32px;
-`
+`;
 
 const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   const [fromValue, setFromValue] = useState<number>(0);
@@ -52,7 +52,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     startX: 0,
     endX: 0,
     pivotPercentage: 0,
-    pivotValue: 0,
+    pivotValue: 0
   });
 
   useEffect(() => {
