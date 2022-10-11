@@ -3,6 +3,11 @@ import styled from '@emotion/styled';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+const DropdownContainer = styled.div`
+  position: relative;
+  max-height: fit-content;
+`
+
 const DropdownInputContainer = styled.div`
   background-color: white;
   border-radius: 4px;
@@ -76,6 +81,7 @@ const SelectedItem = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
 `;
 
 interface PropsType {
@@ -121,7 +127,7 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
   };
 
   return (
-    <div style={{ position: 'relative', maxHeight: 'fit-content' }}>
+    <DropdownContainer>
       <DropdownInputContainer ref={dropdownInputEl} onClick={dropdownClickHandler}>
         <DropdownContent>
           {options.map((item) => (
@@ -145,7 +151,7 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
           </DropdownOptionContainer>
         ))}
       </DropdownOptionsContainer>
-    </div>
+    </DropdownContainer>
   );
 };
 
