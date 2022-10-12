@@ -6,7 +6,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const DropdownContainer = styled.div`
   position: relative;
   max-height: fit-content;
-`
+`;
 
 const DropdownInputContainer = styled.div`
   background-color: white;
@@ -126,11 +126,13 @@ const FilterDropdown = ({ data, options, setOptions }: PropsType) => {
     setOptions(newArr);
   };
 
+  const getIntersectionArr = () => options.filter(item => data.includes(item));
+
   return (
     <DropdownContainer>
       <DropdownInputContainer ref={dropdownInputEl} onClick={dropdownClickHandler}>
         <DropdownContent>
-          {options.map((item) => (
+          {getIntersectionArr().map((item) => (
             <SelectedItem key={item}>{item}</SelectedItem>
           ))}
         </DropdownContent>
