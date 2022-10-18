@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import axios from 'axios';
 
 import GameItem from './components/GameItem';
-import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
-import CustomSlider from './components/CustomSlider';
 
 export interface GameItemType {
   id: string;
@@ -29,6 +28,7 @@ const AppStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 72px;
 `;
 
 const GameListStyle = styled.div`
@@ -52,13 +52,25 @@ type Genre =
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
+  const [gameItems, setGameItems] = useState<GameItemType[]>([]);
+
+  useEffect(() => {
+    const setItems = async () => {
+      const items = await axios.get<GameItemType[]>('http://localhost:3001/games');
+      setGameItems(items.data);
+    };
+
+    setItems().catch((error) => {
+      console.error(error);
+    });
+  }, []);
 
   const searchHandler = (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const filtedSearchResult = gameItemsData.filter((item) =>
+    const gameItemsCopy = [...gameItems];
+    const filtedSearchResult = gameItemsCopy.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
     setGameItems(filtedSearchResult);
