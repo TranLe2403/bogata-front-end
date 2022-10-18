@@ -1,84 +1,75 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react';
+import { Box, InputBase } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { makeStyles } from '@mui/styles';
 import styled from '@emotion/styled';
 
-const SearchBarWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const InputWrapper = styled.form`
-  position: relative;
-  display: flex;
-  width: 40%;
+const SearchIconBox = styled.div`
+  padding: 0 8px;
   height: 100%;
-  height: 40px;
-  margin-top: 104px;
-
-  @media (max-width: 768px) {
-    width: calc(100% - 32px);
-  }
-`;
-
-const SearchInputStyle = styled.input`
   position: absolute;
-  height: calc(100% - 2px);
-  width: calc(100% - 18px);
-  border-radius: 4px;
-  display: flex;
-  border: 1px solid #d7d7d7;
-  outline: none;
-  padding: 0 0 0 16px;
-`;
-const AccessoryContainer = styled.div`
-  width: 64px;
-  height: 100%;
+  pointer-events: none;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  right: 0;
+`;
+
+const SearchContainer = styled(Box)`
+  display: flex;
   justify-content: center;
+  margin-top: 104px;
 `;
 
-const MinimumBlock = styled.div`
-  min-width: 64px;
-  flex: 1;
-  padding-left: 16px;
+const SearchStyles = styled.form`
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid #d7d7d7;
+  width: calc(40% - 18px);
 `;
 
-const AccessoryStyle = styled.img`
-  width: 24px;
-  height: 24px;
-  z-index: 1;
-`;
+type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>;
 
 interface PropsType {
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  setSearchValue: Dispatch<SetStateAction<string>>;
   searchValue: string;
-  searchHandler: (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
+  searchHandler: (e: SearchEventType) => void;
 }
 
+const useStyles: any = makeStyles(() => ({
+  inputRoot: {
+    color: 'inherit',
+    width: '100%'
+  },
+  inputInput: {
+    padding: '8px 40px 8px 16px'
+  }
+}));
+
 const SeachInput = ({ setSearchValue, searchValue, searchHandler }: PropsType) => {
+  const classes = useStyles();
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
   return (
-    <SearchBarWrapper>
-      <InputWrapper onSubmit={searchHandler}>
-        <SearchInputStyle
+    <SearchContainer>
+      <SearchStyles onSubmit={searchHandler}>
+        <SearchIconBox data-testid="search-icon" onClick={searchHandler}>
+          <SearchIcon />
+        </SearchIconBox>
+        <InputBase
           data-testid="search-bar"
-          placeholder="Let's find some games"
-          type="text"
+          placeholder="Search…"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput
+          }}
+          inputProps={{ 'aria-label': 'search' }}
           value={searchValue}
           onChange={onChangeHandler}
         />
-        <MinimumBlock />
-        <AccessoryContainer data-testid="search-icon" onClick={searchHandler}>
-          <AccessoryStyle src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Search_Icon.svg/1024px-Search_Icon.svg.png" />
-        </AccessoryContainer>
-      </InputWrapper>
-    </SearchBarWrapper>
+      </SearchStyles>
+    </SearchContainer>
   );
 };
 
