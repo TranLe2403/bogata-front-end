@@ -12,17 +12,16 @@ const SliderTrack = styled.div`
   position: relative;
   display: flex;
   flex: 1;
-  border-radius: 2px;
-  height: 4px;
+  border-radius: 1px;
+  height: 2px;
   margin: 0 8px;
-  background: #cccccc;
+  background: #c1c1c1;
 `;
 
 const SliderBar = styled.div`
   position: absolute;
   inset: 0;
-  border-radius: 2px;
-  background-color: #0a8cfa;
+  background-color: #000000;
 `;
 
 const SliderThumb = styled.div`
@@ -32,7 +31,7 @@ const SliderThumb = styled.div`
   width: 16px;
   height: 16px;
   border-radius: 8px;
-  background-color: red;
+  background-color: #000000;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
 `;
 
@@ -42,7 +41,7 @@ const ValueWrapper = styled.div`
   align-items: center;
   height: 16px;
   min-width: 32px;
-`
+`;
 
 const CustomSlider = ({ min, max }: { min: number; max: number }) => {
   const [fromValue, setFromValue] = useState<number>(0);
@@ -52,7 +51,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     startX: 0,
     endX: 0,
     pivotPercentage: 0,
-    pivotValue: 0,
+    pivotValue: 0
   });
 
   useEffect(() => {
@@ -157,13 +156,7 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     setFromValue(topSide ? fromValue : value);
   };
 
-  const renderValues = (value: number) => {
-    return (
-      <ValueWrapper>
-        <p>{value.toFixed()}</p>
-      </ValueWrapper>
-    );
-  };
+  const renderValues = (value: number) => <ValueWrapper>{value.toFixed()}</ValueWrapper>;
 
   return (
     <SliderContainer>
