@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import styled from '@emotion/styled';
+import { Typography } from '@mui/material';
 
 import GameItem from './components/GameItem';
 import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
-import FilterDropdown from './components/FilterDropdown';
-import CustomSlider from './components/CustomSlider';
+import SeachInput from './components/SearchInput';
+import FilterBox from './components/FilterBox';
 
 export interface GameItemType {
   id: string;
@@ -30,28 +31,16 @@ const AppStyle = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 72px;
   padding: 32px;
-  gap: 40px;
+  gap: 24px;
 `;
 
 const GameListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`;
-
-const FilterContainer = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  background-color: #f0f0f0;
-  padding: 32px 16px;
-  gap: 16px;
-`;
-
-const FilterLabel = styled.h4`
-  margin: 0;
+  width: 100%;
+  align-items: center;
 `;
 
 type Genre =
@@ -65,26 +54,13 @@ type Genre =
   | 'City Building'
   | 'Detective'; // Consider to use enum type
 
-const genre = [
-  'Co-op',
-  'Action',
-  'Survival',
-  'Trading',
-  'Strategy',
-  'Resource Management',
-  'RPG',
-  'City Building',
-  'Detective'
-];
+type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>;
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
-  const [filterOptions, setFilterOptions] = useState<string[]>([]);
 
-  const searchHandler = (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const searchHandler = (e: SearchEventType) => {
     e.preventDefault();
     const filtedSearchResult = gameItemsData.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -92,41 +68,24 @@ const App = () => {
     setGameItems(filtedSearchResult);
   };
 
+  const renderGameList = () => {
+    if (gameItems.length === 0) return <Typography component="p">No game found</Typography>;
+    return gameItems
+      .filter((game) => game.available)
+      .map((item) => <GameItem key={item.id} data={item} />);
+  };
+
   return (
     <>
-      <TopBar
+      <TopBar />
+      <SeachInput
         setSearchValue={setSearchValue}
         searchValue={searchValue}
         searchHandler={searchHandler}
       />
-
       <AppStyle>
-        <FilterContainer>
-          <h3 style={{ margin: 0 }}>Filters</h3>
-          <FilterLabel>Genre</FilterLabel>
-          <FilterDropdown setOptions={setFilterOptions} options={filterOptions} data={genre} />
-          <FilterLabel>Player Count</FilterLabel>
-          <CustomSlider min={1} max={20} />
-          <FilterLabel>Duration</FilterLabel>
-          <CustomSlider min={0} max={180} />
-          <FilterLabel>Size</FilterLabel>
-          <FilterDropdown
-            setOptions={setFilterOptions}
-            options={filterOptions}
-            data={['small', 'normal', 'large']}
-          />
-          <FilterLabel>Min Age</FilterLabel>
-          <input type="number" />
-          <FilterLabel>Ratings</FilterLabel>
-          <CustomSlider min={1} max={10} />
-        </FilterContainer>
-        <GameListStyle data-testid="game-list">
-          {gameItems
-            .filter((game) => game.available)
-            .map((item) => (
-              <GameItem key={item.id} data={item} />
-            ))}
-        </GameListStyle>
+        <FilterBox />
+        <GameListStyle data-testid="game-list">{renderGameList()}</GameListStyle>
       </AppStyle>
     </>
   );
