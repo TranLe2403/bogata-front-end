@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Box, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import FilterDropdown from '../FilterDropdown';
+import FilterSelect from '../FilterSelect';
 import CustomSlider from '../CustomSlider';
 
 const FilterContainer = styled.div`
@@ -89,13 +89,13 @@ const FilterBox = () => {
           </SelectedFilterOption>
         ))}
       </FilterApplied>
-      <FilterDropdown
+      <FilterSelect
         title="Genre"
         setOptions={setFilterOptions}
         options={filterOptions}
         data={genre}
       />
-      <FilterDropdown
+      <FilterSelect
         title="Size"
         setOptions={setFilterOptions}
         options={filterOptions}
