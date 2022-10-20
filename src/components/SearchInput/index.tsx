@@ -1,19 +1,8 @@
 import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react';
-import { Box, InputBase } from '@mui/material';
+import { Box, IconButton, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { makeStyles } from '@mui/styles';
 import styled from '@emotion/styled';
-
-const SearchIconBox = styled.div`
-  padding: 0 8px;
-  height: 100%;
-  position: absolute;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  right: 0;
-`;
 
 const SearchContainer = styled(Box)`
   display: flex;
@@ -22,13 +11,20 @@ const SearchContainer = styled(Box)`
 `;
 
 const SearchStyles = styled.form`
-  position: relative;
   border-radius: 4px;
   border: 1px solid #d7d7d7;
   width: calc(40% - 18px);
+  display: flex;
+  align-items: center;
 `;
 
-type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>;
+const CustomIconButton = styled(IconButton)`
+  &:hover {
+    background: none;
+  }
+`
+
+type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 interface PropsType {
   setSearchValue: Dispatch<SetStateAction<string>>;
@@ -42,7 +38,7 @@ const useStyles: any = makeStyles(() => ({
     width: '100%'
   },
   inputInput: {
-    padding: '8px 40px 8px 16px'
+    padding: '8px 40px 8px 0'
   }
 }));
 
@@ -54,9 +50,6 @@ const SeachInput = ({ setSearchValue, searchValue, searchHandler }: PropsType) =
   return (
     <SearchContainer>
       <SearchStyles onSubmit={searchHandler}>
-        <SearchIconBox data-testid="search-icon" onClick={searchHandler}>
-          <SearchIcon />
-        </SearchIconBox>
         <InputBase
           data-testid="search-bar"
           placeholder="Search…"
@@ -67,7 +60,11 @@ const SeachInput = ({ setSearchValue, searchValue, searchHandler }: PropsType) =
           inputProps={{ 'aria-label': 'search' }}
           value={searchValue}
           onChange={onChangeHandler}
+          sx={{ ml: 1, flex: 1 }}
         />
+        <CustomIconButton type="button" aria-label="search" onClick={searchHandler}>
+          <SearchIcon />
+        </CustomIconButton>
       </SearchStyles>
     </SearchContainer>
   );

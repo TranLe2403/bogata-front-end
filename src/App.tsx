@@ -54,7 +54,7 @@ type Genre =
   | 'City Building'
   | 'Detective'; // Consider to use enum type
 
-type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>;
+type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
