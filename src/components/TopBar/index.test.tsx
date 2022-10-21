@@ -1,7 +1,7 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TopBar from '../TopBar';
-import { gameItemsData } from '../../dummyData';
 
 describe('<TopBar />', () => {
   const mockSetState: React.Dispatch<React.SetStateAction<string>> = jest.fn();
