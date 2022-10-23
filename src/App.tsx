@@ -1,9 +1,9 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Typography } from '@mui/material';
+import axios from 'axios';
 
 import GameItem from './components/GameItem';
-import { gameItemsData } from './dummyData';
 import TopBar from './components/TopBar';
 import SeachInput from './components/SearchInput';
 import FilterBox from './components/FilterBox';
@@ -58,11 +58,23 @@ type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonE
 
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
-  const [gameItems, setGameItems] = useState<GameItemType[]>(gameItemsData);
+  const [gameItems, setGameItems] = useState<GameItemType[]>([]);
+
+  useEffect(() => {
+    const setItems = async () => {
+      const items = await axios.get<GameItemType[]>('http://localhost:3001/games');
+      setGameItems(items.data);
+    };
+
+    setItems().catch((error) => {
+      console.error(error);
+    });
+  }, []);
 
   const searchHandler = (e: SearchEventType) => {
     e.preventDefault();
-    const filtedSearchResult = gameItemsData.filter((item) =>
+    const gameItemsCopy = [...gameItems];
+    const filtedSearchResult = gameItemsCopy.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
     setGameItems(filtedSearchResult);
