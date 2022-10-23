@@ -4,8 +4,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles: any = makeStyles(() => ({
   card: { display: 'flex', width: '100%', background: '#ECECEC' },
-  media: { height: 160, width: 160 },
-  box: { display: 'flex', justifyContent: 'space-between' }
+  media: { height: 160, width: 160 }
 }));
 
 const DEFAULT_IMG =
@@ -21,19 +20,23 @@ const GameItem = ({ data }: { data: GameItemType }) => {
         data-testid="game-image"
         classes={{ root: classes.media }}
         image={getImageSrc()}
-        title="Contemplative Reptile"
+        title={data.name}
       />
-      <CardContent sx={{ flex: 1 }}>
-        <Box sx={classes.box}>
+      <CardContent sx={{ flex: 1 }} data-testid="game-content">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography sx={{ fontWeight: 'bold' }} gutterBottom variant="h5" component="h2">
             {data.name}
           </Typography>
-          <Typography component="p">BoardGameGeek rating: {data.rating}/10</Typography>
+          <Typography data-testid="game-rating" component="p">
+            BoardGameGeek rating: {data.rating}/10
+          </Typography>
         </Box>
         <Typography sx={{ fontStyle: 'italic' }} component="p">
           {data.genre.map((item, i) => `${item}${i === data.genre.length - 1 ? '' : ', '}`)}
         </Typography>
-        <Typography component="p">Date added: {data.dateAdded}</Typography>
+        <Typography data-testid="game-date-added" component="p">
+          Date added: {data.dateAdded}
+        </Typography>
       </CardContent>
     </Card>
   );
