@@ -55,15 +55,15 @@ const genre = [
 ];
 
 const CustomTextField = ({ label }: { label: string }) => (
-  <TextFieldStyle
-    id="filled-required"
-    variant="filled"
-    size="small"
-    label={label}
-    type="number"
-    InputLabelProps={{ shrink: true }}
-  />
-);
+    <TextFieldStyle
+      id="filled-required"
+      variant="filled"
+      size="small"
+      label={label}
+      type="number"
+      InputLabelProps={{ shrink: true }}
+    />
+  );
 
 const FilterBox = () => {
   const [filterOptions, setFilterOptions] = useState<string[]>([]);
@@ -74,9 +74,9 @@ const FilterBox = () => {
   };
 
   return (
-    <FilterContainer>
+    <FilterContainer data-testid="filter-container">
       <Typography variant="h5">Filters</Typography>
-      <FilterApplied>
+      <FilterApplied data-testid="filter-applied">
         {filterOptions.map((item) => (
           <SelectedFilterOption key={item}>
             <CloseIcon
