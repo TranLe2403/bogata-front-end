@@ -45,6 +45,7 @@ const FilterSelect = ({ title, data, options, setOptions }: PropsType) => {
           key={item}
           sx={{ py: 0, minHeight: 32 }}
           onClick={() => onClickOptionHandler(item)}
+          data-testid="list-item"
         >
           {options.includes(item) && <SelectedBar />}
           <ListItemText primary={item} primaryTypographyProps={{ fontSize: 14, fontWeight }} />
@@ -60,6 +61,7 @@ const FilterSelect = ({ title, data, options, setOptions }: PropsType) => {
         sx={{ px: 0 }}
         style={{ display: 'flex', cursor: 'pointer' }}
         justifyContent="space-between"
+        data-testid="filter-select-heading"
       >
         <Typography component="p">{title}</Typography>
         <KeyboardArrowDown
