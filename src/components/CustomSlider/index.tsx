@@ -169,11 +169,13 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
           }}
         ></SliderBar>
         <SliderThumb
+          data-testid="slider-selector"
           ref={toThumbEl}
           style={{ left: `${getBarPercentage(setValue(false))}%` }}
           onMouseDown={startDrag}
         />
         <SliderThumb
+          data-testid="slider-selector"
           ref={fromThumbEl}
           style={{ left: `${getBarPercentage(setValue(true))}%` }}
           onMouseDown={startDrag}
