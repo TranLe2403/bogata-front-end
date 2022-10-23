@@ -22,7 +22,7 @@ const CustomIconButton = styled(IconButton)`
   &:hover {
     background: none;
   }
-`
+`;
 
 type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -62,7 +62,12 @@ const SeachInput = ({ setSearchValue, searchValue, searchHandler }: PropsType) =
           onChange={onChangeHandler}
           sx={{ ml: 1, flex: 1 }}
         />
-        <CustomIconButton type="button" aria-label="search" onClick={searchHandler}>
+        <CustomIconButton
+          data-testid="search-icon"
+          type="button"
+          aria-label="search"
+          onClick={searchHandler}
+        >
           <SearchIcon />
         </CustomIconButton>
       </SearchStyles>
