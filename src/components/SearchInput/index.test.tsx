@@ -13,25 +13,25 @@ describe('<SeachInput />', () => {
 
   it('should display working search bar', () => {
     const searchInputElem = render(
-      <SeachInput setSearchValue={mockSetState} searchValue="" searchHandler={() => {}} />
+      <SeachInput setSearchValue={() => {}} />
     );
     const searchbarElement = searchInputElem.getByTestId('search-bar');
     const selectNode = searchbarElement.childNodes[0];
 
     fireEvent.change(selectNode, { target: { value: 'Zomb' } });
 
-    expect(mockSetState).toHaveBeenCalledWith('Zomb');
+    expect(selectNode).toHaveValue('Zomb');
   });
 
-  it('should display search icon and it is clickable', () => {
+  it('should display search icon and it is workable', () => {
     const searchInputElem = render(
-      <SeachInput searchHandler={mockSeachHandler} searchValue="" setSearchValue={() => {}} />
+      <SeachInput setSearchValue={mockSetState} />
     );
     const searchIconElement = searchInputElem.getByTestId('search-icon');
     const getIconElem = searchIconElement.firstChild as HTMLImageElement;
 
     fireEvent.click(getIconElem);
 
-    expect(mockSeachHandler).toBeCalledTimes(1);
+    expect(mockSetState).toBeCalledTimes(1);
   });
 });
