@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Typography } from '@mui/material';
 import axios from 'axios';
@@ -54,8 +54,6 @@ type Genre =
   | 'City Building'
   | 'Detective'; // Consider to use enum type
 
-type SearchEventType = FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>;
-
 const App = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [gameItems, setGameItems] = useState<GameItemType[]>([]);
@@ -63,22 +61,13 @@ const App = () => {
   useEffect(() => {
     const setItems = async () => {
       const items = await axios.get<GameItemType[]>('http://localhost:3001/games');
-      setGameItems(items.data);
+      const filtedSearchResult = items.data.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setGameItems(filtedSearchResult);
     };
-
-    setItems().catch((error) => {
-      console.error(error);
-    });
-  }, []);
-
-  const searchHandler = (e: SearchEventType) => {
-    e.preventDefault();
-    const gameItemsCopy = [...gameItems];
-    const filtedSearchResult = gameItemsCopy.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setGameItems(filtedSearchResult);
-  };
+    setItems().catch((error) => console.error(error));
+  }, [searchValue]);
 
   const renderGameList = () => {
     if (gameItems.length === 0) return <Typography component="p">No game found</Typography>;
@@ -90,11 +79,7 @@ const App = () => {
   return (
     <>
       <TopBar />
-      <SeachInput
-        setSearchValue={setSearchValue}
-        searchValue={searchValue}
-        searchHandler={searchHandler}
-      />
+      <SeachInput setSearchValue={setSearchValue} />
       <AppStyle>
         <FilterBox />
         <GameListStyle data-testid="game-list">{renderGameList()}</GameListStyle>
