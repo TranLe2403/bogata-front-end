@@ -5,7 +5,7 @@ import SeachInput from '../SearchInput';
 
 describe('<SeachInput />', () => {
   const mockSetState: Dispatch<SetStateAction<string>> = jest.fn();
-  
+
   it('should display working search bar', () => {
     const searchInputElem = render(<SeachInput setSearchValue={() => {}} />);
     const searchbarElement = searchInputElem.getByTestId('search-bar');
@@ -18,10 +18,9 @@ describe('<SeachInput />', () => {
 
   it('should display search icon and it is workable', () => {
     const searchInputElem = render(<SeachInput setSearchValue={mockSetState} />);
-    const searchIconElement = searchInputElem.getByTestId('search-icon');
-    const getIconElem = searchIconElement.firstChild as HTMLImageElement;
+    const searchIconElement = searchInputElem.getByTestId('search-icon') as HTMLImageElement;
 
-    fireEvent.click(getIconElem);
+    fireEvent.click(searchIconElement);
 
     expect(mockSetState).toBeCalledTimes(1);
   });

@@ -40,8 +40,9 @@ const useStyles: any = makeStyles(() => ({
   }
 }));
 
+let search = '';
+
 const SeachInput = ({ setSearchValue }: PropsType) => {
-  let search = '';
   const classes = useStyles();
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     search = e.target.value;
@@ -66,13 +67,8 @@ const SeachInput = ({ setSearchValue }: PropsType) => {
           onChange={onChangeHandler}
           sx={{ ml: 1, flex: 1 }}
         />
-        <CustomIconButton
-          data-testid="search-icon"
-          type="button"
-          aria-label="search"
-          onClick={onSubmitHandler}
-        >
-          <SearchIcon />
+        <CustomIconButton type="button" aria-label="search" onClick={onSubmitHandler}>
+          <SearchIcon data-testid="search-icon" />
         </CustomIconButton>
       </SearchStyles>
     </SearchContainer>

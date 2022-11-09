@@ -29,10 +29,9 @@ interface PropsType {
 const FilterSelect = ({ title, data, options, setOptions }: PropsType) => {
   const [open, setOpen] = useState<boolean>(true);
   const onClickOptionHandler = (item: string) => {
-    const copyOptions = [...options];
-    const newArr = copyOptions.includes(item)
-      ? copyOptions.filter((option) => option !== item)
-      : copyOptions.concat(item);
+    const newArr = options.includes(item)
+      ? options.filter((option) => option !== item)
+      : options.concat(item);
     setOptions(newArr);
   };
 

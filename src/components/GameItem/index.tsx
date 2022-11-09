@@ -1,18 +1,17 @@
 import { GameItemType } from '../../App';
 import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { DEFAULT_IMG } from '../../utils';
 
 const useStyles: any = makeStyles(() => ({
   card: { display: 'flex', width: '100%', background: '#ECECEC' },
   media: { height: 160, width: 160 }
 }));
 
-const DEFAULT_IMG =
-  'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png';
-
 const GameItem = ({ data }: { data: GameItemType }) => {
   const classes = useStyles();
-  const getImageSrc = () => (data.pictures === undefined ? DEFAULT_IMG : data.pictures[0]);
+  const getImageSrc = () =>
+    data.pictures === undefined || data.pictures.length <= 0 ? DEFAULT_IMG : data.pictures[0];
 
   return (
     <Card classes={{ root: classes.card }}>
