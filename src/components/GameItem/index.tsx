@@ -1,72 +1,42 @@
 import { GameItemType } from '../../App';
-import StarIcon from '@mui/icons-material/Star';
-import styled from '@emotion/styled';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { DEFAULT_IMG } from '../../utils';
 
-const GameItemContainer = styled.div`
-  background: #ececec;
-  padding: 16px 32px;
-  display: flex;
-  gap: 16px;
-  border-radius: 4px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-`;
-
-const ImageStyle = styled.img`
-  width: 160px;
-  height: 160px;
-  border-radius: 4px;
-`;
-
-const NoMarginText = styled.p`
-  margin: 0;
-`;
-
-const ItalicText = styled.p`
-  font-style: italic;
-  margin: 0;
-`;
-
-const NoMarginHeading = styled.h2`
-  margin: 0;
-`;
-
-const GameInfoStyle = styled.div`
-  flex: 1;
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-`;
-
-const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: fit-content;
-  gap: 8px;
-`;
+const useStyles: any = makeStyles(() => ({
+  card: { display: 'flex', width: '100%', background: '#ECECEC' },
+  media: { height: 160, width: 160 }
+}));
 
 const GameItem = ({ data }: { data: GameItemType }) => {
+  const classes = useStyles();
+  const getImageSrc = () => data.pictures ? data.pictures[0] : DEFAULT_IMG;
+
   return (
-    <GameItemContainer>
-      <ImageStyle
+    <Card classes={{ root: classes.card }}>
+      <CardMedia
         data-testid="game-image"
-        src={
-          data.pictures !== undefined
-            ? data.pictures[0]
-            : 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png'
-        }
+        classes={{ root: classes.media }}
+        image={getImageSrc()}
+        title={data.name}
       />
-      <GameInfoStyle>
-        <NoMarginHeading>{data.name}</NoMarginHeading>
-        <ItalicText>
+      <CardContent sx={{ flex: 1 }} data-testid="game-content">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography sx={{ fontWeight: 'bold' }} gutterBottom variant="h5" component="h2">
+            {data.name}
+          </Typography>
+          <Typography data-testid="game-rating" component="p">
+            BoardGameGeek rating: {data.rating}/10
+          </Typography>
+        </Box>
+        <Typography sx={{ fontStyle: 'italic' }} component="p">
           {data.genre.map((item, i) => `${item}${i === data.genre.length - 1 ? '' : ', '}`)}
-        </ItalicText>
-        <NoMarginText>Date added: {data.dateAdded}</NoMarginText>
-      </GameInfoStyle>
-      <RatingContainer>
-        <NoMarginText>BoardGameGeek rating: {data.rating}/10</NoMarginText>
-        <StarIcon />
-      </RatingContainer>
-    </GameItemContainer>
+        </Typography>
+        <Typography data-testid="game-date-added" component="p">
+          Date added: {data.dateAdded}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
 

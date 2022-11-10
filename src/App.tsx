@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import { Typography } from '@mui/material';
 import axios from 'axios';
 
 import GameItem from './components/GameItem';
 import TopBar from './components/TopBar';
+import SeachInput from './components/SearchInput';
+import FilterBox from './components/FilterBox';
 
 export interface GameItemType {
   id: string;
@@ -23,20 +26,21 @@ export interface GameItemType {
 }
 
 const AppStyle = styled.div`
-  width: 100%;
+  max-width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  margin-top: 72px;
+  padding: 32px;
+  gap: 24px;
 `;
 
 const GameListStyle = styled.div`
-  padding: 32px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
+  align-items: center;
 `;
 
 type Genre =
@@ -57,41 +61,28 @@ const App = () => {
   useEffect(() => {
     const setItems = async () => {
       const items = await axios.get<GameItemType[]>('http://localhost:3001/games');
-      setGameItems(items.data);
+      const filtedSearchResult = items.data.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setGameItems(filtedSearchResult);
     };
+    setItems().catch((error) => console.error(error));
+  }, [searchValue]);
 
-    setItems().catch((error) => {
-      console.error(error);
-    });
-  }, []);
-
-  const searchHandler = (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    const gameItemsCopy = [...gameItems];
-    const filtedSearchResult = gameItemsCopy.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setGameItems(filtedSearchResult);
+  const renderGameList = () => {
+    if (gameItems.length === 0) return <Typography component="p">No game found</Typography>;
+    return gameItems
+      .filter((game) => game.available)
+      .map((item) => <GameItem key={item.id} data={item} />);
   };
 
   return (
     <>
-      <TopBar
-        setSearchValue={setSearchValue}
-        searchValue={searchValue}
-        searchHandler={searchHandler}
-      />
-
+      <TopBar />
+      <SeachInput setSearchValue={setSearchValue} />
       <AppStyle>
-        <GameListStyle data-testid="game-list">
-          {gameItems
-            .filter((game) => game.available)
-            .map((item) => (
-              <GameItem key={item.id} data={item} />
-            ))}
-        </GameListStyle>
+        <FilterBox />
+        <GameListStyle data-testid="game-list">{renderGameList()}</GameListStyle>
       </AppStyle>
     </>
   );

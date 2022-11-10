@@ -6,17 +6,20 @@ import { gameItemsData } from '../../dummyData';
 describe('<GameItem />', () => {
   it('should display image properly', () => {
     const gameItemElem = render(<GameItem data={gameItemsData[0]} />);
-    const getElem = gameItemElem.getByTestId('game-image') as HTMLImageElement;
-    expect(getElem.src).toContain(
+    const imageElement = gameItemElem.getByTestId('game-image');
+    expect(imageElement.style.backgroundImage).toContain(
       'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png'
     );
   });
 
-  it('should display image properly if there is item in pictures props', () => {
+  it('should display game information properly', () => {
     const gameItemElem = render(<GameItem data={gameItemsData[1]} />);
-    const getElem = gameItemElem.getByTestId('game-image') as HTMLImageElement;
-    expect(getElem.src).toContain(
-      'https://cf.geekdo-images.com/g4XmxyKhNVdhC3QPd1purQ__itemrep/img/QKJwfdV3Qrv9w2TX_ML5T3z5G9E=/fit-in/246x300/filters:strip_icc()/pic3761012.jpg'
-    );
+    const contentElement = gameItemElem.getByTestId('game-content');
+    const ratingElem = gameItemElem.getByTestId('game-rating');
+    const dateElem = gameItemElem.getByTestId('game-date-added');
+
+    expect(contentElement.childNodes).toHaveLength(3);
+    expect(ratingElem).toHaveTextContent('BoardGameGeek rating:');
+    expect(dateElem).toHaveTextContent('Date added:');
   });
 });

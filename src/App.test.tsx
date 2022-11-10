@@ -23,7 +23,7 @@ describe('<App />', () => {
           status: 200,
           response: gameItemsData
         })
-        .catch((error) => {
+        .catch((error: ErrorOptions) => {
           console.error(error);
         });
     });
