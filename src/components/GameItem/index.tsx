@@ -10,8 +10,7 @@ const useStyles: any = makeStyles(() => ({
 
 const GameItem = ({ data }: { data: GameItemType }) => {
   const classes = useStyles();
-  const getImageSrc = () =>
-    data.pictures === undefined || data.pictures.length <= 0 ? DEFAULT_IMG : data.pictures[0];
+  const getImageSrc = () => data.pictures ? data.pictures[0] : DEFAULT_IMG;
 
   return (
     <Card classes={{ root: classes.card }}>
