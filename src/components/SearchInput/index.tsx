@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent, FormEvent, Dispatch, SetStateAction, FC } from 'react';
 import { Box, IconButton, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { makeStyles } from '@mui/styles';
@@ -42,13 +42,13 @@ const useStyles: any = makeStyles(() => ({
 
 let search = '';
 
-const SeachInput = ({ setSearchValue }: PropsType) => {
+const SeachInput: FC<PropsType> = ({ setSearchValue }) => {
   const classes = useStyles();
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
     search = e.target.value;
   };
 
-  const onSubmitHandler = (e: SearchEventType) => {
+  const onSubmitHandler = (e: SearchEventType): void => {
     e.preventDefault();
     setSearchValue(search);
   };
@@ -57,17 +57,17 @@ const SeachInput = ({ setSearchValue }: PropsType) => {
     <SearchContainer>
       <SearchStyles onSubmit={onSubmitHandler}>
         <InputBase
-          data-testid="search-bar"
-          placeholder="Search…"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput
           }}
+          data-testid="search-bar"
           inputProps={{ 'aria-label': 'search' }}
           onChange={onChangeHandler}
+          placeholder="Search…"
           sx={{ ml: 1, flex: 1 }}
         />
-        <CustomIconButton type="button" aria-label="search" onClick={onSubmitHandler}>
+        <CustomIconButton aria-label="search" onClick={onSubmitHandler} type="button">
           <SearchIcon data-testid="search-icon" />
         </CustomIconButton>
       </SearchStyles>

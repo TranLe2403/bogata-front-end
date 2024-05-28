@@ -33,7 +33,7 @@ const FilterSelect: FC<PropsType> = ({ title, data, setGameInput, gameInput }) =
     const newArr = gameInput.genres.includes(item)
       ? gameInput.genres.filter((option) => option !== item)
       : gameInput.genres.concat(item);
-      setGameInput({...gameInput, genres: newArr});
+    setGameInput({...gameInput, genres: newArr});
   };
 
   const getAllOptions = (): ReactNode[] | undefined => {

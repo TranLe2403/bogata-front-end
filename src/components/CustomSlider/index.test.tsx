@@ -4,7 +4,7 @@ import CustomSlider from '../CustomSlider';
 
 describe('<CustomSlider />', () => {
   it('should render two selectors', () => {
-    const sliderElement = render(<CustomSlider min={0} max={100} />);
+    const sliderElement = render(<CustomSlider max={100} min={0} />);
     const selectorElems = sliderElement.getAllByTestId('slider-selector');
 
     expect(selectorElems).toHaveLength(2);

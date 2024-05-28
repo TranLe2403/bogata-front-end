@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { Box, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import FilterSelect from '../FilterSelect';
 import CustomSlider from '../CustomSlider';
 
 const FilterContainer = styled.div`
@@ -42,7 +41,7 @@ const TextFieldStyle = styled(TextField)`
   }
 `;
 
-const genre = [
+export const genre = [
   'Co-op',
   'Action',
   'Survival',
@@ -54,20 +53,20 @@ const genre = [
   'Detective'
 ];
 
-const CustomTextField = ({ label }: { label: string }) => (
-    <TextFieldStyle
-      id="filled-required"
-      variant="filled"
-      size="small"
-      label={label}
-      type="number"
-      InputLabelProps={{ shrink: true }}
-    />
-  );
+const CustomTextField: FC<{ label: string }> = ({ label }) => (
+  <TextFieldStyle
+    InputLabelProps={{ shrink: true }}
+    id="filled-required"
+    label={label}
+    size="small"
+    type="number"
+    variant="filled"
+  />
+);
 
-const FilterBox = () => {
+const FilterBox: ReactNode = () => {
   const [filterOptions, setFilterOptions] = useState<string[]>([]);
-  const handleRemoveButton = (item: string) => {
+  const handleRemoveButton = (item: string): void => {
     const filterOptionsCopy = [...filterOptions];
     const newOptions = filterOptionsCopy.filter((option) => option !== item);
     setFilterOptions(newOptions);
@@ -80,8 +79,8 @@ const FilterBox = () => {
         {filterOptions.map((item) => (
           <SelectedFilterOption key={item}>
             <CloseIcon
-              sx={{ fontSize: 'small', cursor: 'pointer' }}
               onClick={() => handleRemoveButton(item)}
+              sx={{ fontSize: 'small', cursor: 'pointer' }}
             />
             <Typography component="p" fontSize={14}>
               {item}
@@ -89,7 +88,7 @@ const FilterBox = () => {
           </SelectedFilterOption>
         ))}
       </FilterApplied>
-      <FilterSelect
+      {/* <FilterSelect
         title="Genre"
         setOptions={setFilterOptions}
         options={filterOptions}
@@ -100,10 +99,10 @@ const FilterBox = () => {
         setOptions={setFilterOptions}
         options={filterOptions}
         data={['small', 'normal', 'large']}
-      />
+      /> */}
       <Box style={{ display: 'flex', flexDirection: 'column', gap: 8 }} sx={{ py: 1 }}>
         <Typography component="p">Duration</Typography>
-        <CustomSlider min={0} max={180} />
+        <CustomSlider max={180} min={0} />
       </Box>
       <CustomTextField label="Min Player" />
       <CustomTextField label="Min Age" />

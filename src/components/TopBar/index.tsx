@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -22,7 +21,7 @@ const ProjectNameStyle = styled.h1`
   font-size: 40px;
 `;
 
-const TopBar = () => {
+const TopBar = (): JSX.Element => {
   return (
     <TopBarContainer>
       <MenuIcon fontSize="large" />

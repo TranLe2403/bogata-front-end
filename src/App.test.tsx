@@ -1,8 +1,8 @@
 import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
 import moxios from 'moxios';
 import { gameItemsData } from './dummyData';
+import { App } from './App';
 
 describe('<App />', () => {
   beforeEach(() => {
