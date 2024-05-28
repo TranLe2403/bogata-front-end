@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
-import { Typography } from '@mui/material';
+import { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
+import { NewGameItem } from './components/NewGameItem';
+import { GameInputType, GameItem } from './types/GameType';
+import { GameItemModal } from './components/GameItemForm';
+import { Button } from '@mui/material';
 
-import GameItem from './components/GameItem';
-import TopBar from './components/TopBar';
-import SeachInput from './components/SearchInput';
-import FilterBox from './components/FilterBox';
 
 export interface GameItemType {
   id: string;
@@ -25,23 +23,6 @@ export interface GameItemType {
   rating: number;
 }
 
-const AppStyle = styled.div`
-  max-width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 32px;
-  gap: 24px;
-`;
-
-const GameListStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  align-items: center;
-`;
 
 type Genre =
   | 'Co-op'
@@ -54,38 +35,51 @@ type Genre =
   | 'City Building'
   | 'Detective'; // Consider to use enum type
 
-const App = () => {
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [gameItems, setGameItems] = useState<GameItemType[]>([]);
+const DEFAULT_GAME_VALUE = {
+  name: '',
+  genres: [],
+  minPlayer: 0,
+  description: '',
+  maxPlayer: 0,
+  playDuration: 0,
+  available: true,
+  pictures: [],
+  size: 'normal',
+  minAge: 0,
+  condition: '',  
+}
+
+export const App = (): JSX.Element => {
+  const [gameInput, setGameInput] = useState<GameInputType>(DEFAULT_GAME_VALUE)
+  const [open, setOpen] = useState(false)
+  const [gameItems, setGameItems] = useState<GameItem[]>([]);
 
   useEffect(() => {
-    const setItems = async () => {
-      const items = await axios.get<GameItemType[]>('http://localhost:3001/games');
-      const filtedSearchResult = items.data.filter((item) =>
-        item.name.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      setGameItems(filtedSearchResult);
+    const setItems = async (): Promise<void> => {
+      const abc = await axios.get('http://localhost:3005/api/games');
+      console.log('abc: ', abc)
+      setGameItems(abc.data)
     };
     setItems().catch((error) => console.error(error));
-  }, [searchValue]);
+  }, []);
 
-  const renderGameList = () => {
-    if (gameItems.length === 0) return <Typography component="p">No game found</Typography>;
-    return gameItems
-      .filter((game) => game.available)
-      .map((item) => <GameItem key={item.id} data={item} />);
-  };
+  const handleSubmitGame = (event: FormEvent<HTMLFormElement> ): void => {
+    event.preventDefault()
+    axios.post('http://localhost:3005/api/games', gameInput).then(res => {
+      setGameItems(gameItems.concat(res.data))
+    }).catch(err => console.log(err))
+    setGameInput(DEFAULT_GAME_VALUE)
+    setOpen(false)
+  }
 
+  const handleAddGame = (): void => setOpen(true)
   return (
     <>
-      <TopBar />
-      <SeachInput setSearchValue={setSearchValue} />
-      <AppStyle>
-        <FilterBox />
-        <GameListStyle data-testid="game-list">{renderGameList()}</GameListStyle>
-      </AppStyle>
+      <Button onClick={handleAddGame} variant="contained">Add Game</Button>
+      <GameItemModal gameInput={gameInput} handleSubmitGame={handleSubmitGame} open={open} setGameInput={setGameInput} setOpen={setOpen} />
+      {gameItems.map((item) => (
+        <NewGameItem gameItems={gameItems} item={item} key={item.id} setGameItems={setGameItems} />
+      ))}
     </>
   );
 };
-
-export default App;
