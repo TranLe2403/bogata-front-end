@@ -5,13 +5,14 @@ export interface GameItem extends GameInputType {
 export interface GameInputType {
   name: string;
   genres: string[];
-  minPlayer: number,
-  description: string,
-  maxPlayer: number,
-  playDuration: number,
-  available: boolean,
-  pictures: string[],
-  size: String,
-  minAge: number,
-  condition: string,
+  minPlayer: number;
+  description: string;
+  maxPlayer: number;
+  playDuration: number;
+  dateAdded?: string;
+  available: boolean;
+  pictures: string[];
+  size: String;
+  minAge: number;
+  condition: string;
 } 

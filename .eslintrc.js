@@ -19,9 +19,7 @@ module.exports = {
     'react'
   ],
   rules: {
-    "react/prefer-stateless-function": "error",
     "react/button-has-type": "error",
-    "react/no-unused-prop-types": "error",
     "react/jsx-pascal-case": "error",
     "react/jsx-no-script-url": "error",
     "react/no-children-prop": "error",
@@ -36,11 +34,11 @@ module.exports = {
     ],
     "react/jsx-no-leaked-render": ["error", { validStrategies: ["ternary"] }],
     "react/jsx-max-depth": ["error", { max: 5 }],
+    "@typescript-eslint/strict-boolean-expressions": 0,
     "react/function-component-definition": [
       "warn",
       { namedComponents: "arrow-function" },
     ],
-    "indent": ["error", 2],
     "react/jsx-key": [
       "error",
       {
@@ -54,9 +52,8 @@ module.exports = {
     "react/no-typos": "warn",
     "react/display-name": "warn",
     "react/self-closing-comp": "warn",
-    "react/jsx-sort-props": "warn",
     "react/react-in-jsx-scope": "off",
     "react/jsx-one-expression-per-line": "off",
-    "react/prop-types": "off",    
+    "react/prop-types": "off",
   }
 }

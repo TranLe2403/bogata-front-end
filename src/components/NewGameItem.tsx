@@ -1,25 +1,13 @@
-import { Dispatch, FC, FormEvent, SetStateAction, useState} from 'react';
+import { Dispatch, FC, SetStateAction, useState} from 'react';
 import axios from 'axios';
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { GameItemModal } from './GameItemForm';
-import { GameInputType, GameItem } from '../types/GameType';
+import { GameItem } from '../types/GameType';
+import { FieldValues } from 'react-hook-form';
+import { getFullGameInfo } from '../utils/getFullGameInfo';
 
 export const NewGameItem: FC<{item: GameItem, gameItems: GameItem[], setGameItems: Dispatch<SetStateAction<GameItem[]>>}> = ({item, gameItems, setGameItems}) => {
   const [open, setOpen] = useState(false)
-  const [updatedGameInput, setUpdatedGameInput] = useState<GameInputType>({
-    name: item.name,
-    genres: item.genres,
-    description: item.description,
-    minPlayer: item.minPlayer,
-    maxPlayer: item.maxPlayer,
-    playDuration: item.playDuration,
-    available: item.available,
-    pictures: item.pictures,
-    size: item.size,
-    minAge: item.minAge,
-    condition: item.condition,
-  
-  })
 
   const handleDelete = (): void => {
     axios.delete(`http://localhost:3005/api/games/${item.id}`).catch(err => console.error(err))
@@ -31,13 +19,16 @@ export const NewGameItem: FC<{item: GameItem, gameItems: GameItem[], setGameItem
     setOpen(true)
   }
 
-  const handleSubmitEdit = (event: FormEvent<HTMLFormElement> ):  void => {
-    event.preventDefault()
-    axios.put(`http://localhost:3005/api/games/${item.id}`, updatedGameInput).then(res => {
-    }).catch(err => console.log(err))
+  const handleSubmitEdit = async (data: FieldValues ): Promise<void> => {
+    const fullGame = getFullGameInfo(data)
+    try {
+      await axios.put(`http://localhost:3005/api/games/${item.id}`, fullGame)
+    } catch (error) {
+      console.log('error: ', error)
+    }
     const copyGameItems = [...gameItems]
     const itemIndex = copyGameItems.findIndex((game)=>game.id===item.id)
-    copyGameItems[itemIndex] = {id: item.id, ...updatedGameInput }
+    copyGameItems[itemIndex] = {id: item.id, ...fullGame }
     setGameItems(copyGameItems)
     setOpen(false)
   }
@@ -65,7 +56,7 @@ export const NewGameItem: FC<{item: GameItem, gameItems: GameItem[], setGameItem
           <Button onClick={handleDelete} size="small">Delete</Button>
         </CardActions>
       </Card>
-      <GameItemModal gameInput={updatedGameInput} handleSubmitGame={handleSubmitEdit} open={open} setGameInput={setUpdatedGameInput} setOpen={setOpen} />
+      <GameItemModal gameInfo={item} handleSubmitGame={handleSubmitEdit} open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

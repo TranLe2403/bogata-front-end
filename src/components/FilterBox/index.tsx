@@ -41,7 +41,7 @@ const TextFieldStyle = styled(TextField)`
   }
 `;
 
-export const genre = [
+export const genres = [
   'Co-op',
   'Action',
   'Survival',
