@@ -6,6 +6,7 @@ import { GameItemModal } from './components/GameItemForm';
 import { Button } from '@mui/material';
 import { FieldValues } from 'react-hook-form';
 import { getFullGameInfo } from './utils/getFullGameInfo';
+import SeachInput from './components/SearchInput';
 
 
 export interface GameItemType {
@@ -40,7 +41,8 @@ type Genre =
 export const App = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [gameItems, setGameItems] = useState<GameItem[]>([]);
-
+  const [filteredGames, setFiltedGames] = useState<GameItem[]>([])
+  const [searchValue, setSearchValue] = useState('')
   useEffect(() => {
     const setItems = async (): Promise<void> => {
       const abc = await axios.get('http://localhost:3005/api/games');
@@ -61,6 +63,11 @@ export const App = (): JSX.Element => {
     }
   }
 
+  useEffect(() => {
+    if(!searchValue) setFiltedGames(gameItems)
+    else setFiltedGames(gameItems.filter((item) => item.name.includes(searchValue)))
+  }, [searchValue, gameItems]) 
+
   const handleAddGame = (): void => {
     setOpen(true)
   }
@@ -68,13 +75,14 @@ export const App = (): JSX.Element => {
   return (
     <>
       <Button onClick={handleAddGame} variant="contained">Add Game</Button>
+      <SeachInput setSearchValue={setSearchValue} />
       <GameItemModal 
         handleSubmitGame={handleSubmitGame} 
         open={open} 
         onClose={() => setOpen(false)}
         gameInfo={null}
       />
-      {gameItems.map((item) => (
+      {filteredGames.map((item) => (
         <NewGameItem gameItems={gameItems} item={item} key={item.id} setGameItems={setGameItems} />
       ))}
     </>
