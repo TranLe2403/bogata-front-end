@@ -32,18 +32,10 @@ const UserDefaultImage = styled.div`
   height: 40px;
   border-radius: 20px;
   background: red;
-  position: fixed;
-  right: 32px;
-  top: 16px;
-  z-index: 2;
 `;
 
 const UserImage = styled.img`
   border-radius: 20px;
-  position: fixed;
-  right: 32px;
-  top: 16px;
-  z-index: 2;
 `;
 
 type Genre =
@@ -96,28 +88,30 @@ export const App = (): JSX.Element => {
 
   return (
     <>
-    {user.picture === '' ? (
-        <UserDefaultImage onClick={userClickHandler} />
-      ) : (
-        <UserImage
-          src={user.picture}
-          alt={user.name}
-          width={40}
-          height={40}
-          onClick={userClickHandler}
-        />
-      )}
-
-      {showLogin ? (
-        <Login
-          email={user.email}
-          showLogin={showLogin}
-          setShowLogin={setShowLogin}
-          setUser={setUser}
-        />
-      ): null}
-
-      <Button onClick={handleAddGame} variant="contained">Add Game</Button>
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Button onClick={handleAddGame} variant="contained">Add Game</Button>
+        <div style={{position: 'relative' }}>
+          {user.picture === '' ? (
+            <UserDefaultImage onClick={userClickHandler} />
+          ) : (
+            <UserImage
+              src={user.picture}
+              alt={user.name}
+              width={40}
+              height={40}
+              onClick={userClickHandler}
+            />
+          )}
+          {showLogin ? (
+            <Login
+              email={user.email}
+              showLogin={showLogin}
+              setShowLogin={setShowLogin}
+              setUser={setUser}
+            />
+          ): null}
+        </div>
+      </div>
       <GameItemModal 
         handleSubmitGame={handleSubmitGame} 
         open={open} 

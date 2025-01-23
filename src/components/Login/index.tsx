@@ -3,6 +3,7 @@ import React, { FC, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { UserInfo } from '../../App';
 import { Button } from '@mui/material';
+import { useOutsideClick } from './useHandleClickOutside';
 
 interface PropTypes {
   email: string;
@@ -12,28 +13,27 @@ interface PropTypes {
 }
 
 const UserContainerStyle = styled.div`
-  position: fixed;
-  z-index: 5;
+  position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(240, 240, 240, 0.6);
+  background: transparent;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: self-start;
+  justify-content: flex-end;
 `;
 
 const SignInContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   background: white;
   padding: 32px;
-  min-width: 240px;
   border-radius: 4px;
-  align-items: center;
-  gap: 32px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 `;
 
 const Login: FC<PropTypes> = ({ email, setUser, showLogin, setShowLogin }) => {
+  const ref = useOutsideClick(() => {
+    setShowLogin(false);
+  });
+
   useEffect(() => {
     // @ts-expect-error
     const google = window.google;
@@ -49,12 +49,12 @@ const Login: FC<PropTypes> = ({ email, setUser, showLogin, setShowLogin }) => {
   }, [showLogin]);
 
   const handleCallbackResponse = (res: Record<string, string>): void => {
+    setShowLogin(false);
     const {email, name, picture}: Record<string, string> = jwtDecode(res.credential);
     setUser({ email, name, picture });
     const getElem = document.getElementById('signInDiv');
     if (!getElem) return;
     getElem.hidden = true;
-    setShowLogin(false);
   };
 
   const handleSignOut = (): void => {
@@ -69,15 +69,14 @@ const Login: FC<PropTypes> = ({ email, setUser, showLogin, setShowLogin }) => {
   };
 
   return (
-    <UserContainerStyle onClick={userClickHandler}>
-      {email === '' ? (
-        <SignInContainer>
-          <p style={{ fontSize: 48, margin: 0 }}>BoGaTa</p>
-          <div id="signInDiv" />
-        </SignInContainer>
-      ) : (
-        <Button onClick={handleSignOut}>Logout</Button>
-      )}
+    <UserContainerStyle onClick={userClickHandler} ref={ref}>
+      <SignInContainer>
+        {!email ? (
+            <div id="signInDiv" />
+        ) : (
+          <Button onClick={handleSignOut}>Logout</Button>
+        )}
+      </SignInContainer>
     </UserContainerStyle>
   );
 };
