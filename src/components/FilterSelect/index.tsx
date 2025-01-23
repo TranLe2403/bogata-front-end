@@ -1,7 +1,8 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction, FC, ReactNode } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { Box, ListItem, ListItemText, Typography } from '@mui/material';
 import styled from '@emotion/styled';
+import { GameInputType } from '../../types/GameType';
 
 const CustomListItem = styled(ListItem)`
   position: relative;
@@ -22,31 +23,31 @@ const SelectedBar = styled.div`
 interface PropsType {
   title: string;
   data: string[];
-  options: string[];
-  setOptions: Dispatch<SetStateAction<string[]>>;
+  setGameInput:  Dispatch<SetStateAction<GameInputType>>
+  gameInput: GameInputType
 }
 
-const FilterSelect = ({ title, data, options, setOptions }: PropsType) => {
+const FilterSelect: FC<PropsType> = ({ title, data, setGameInput, gameInput }) => {
   const [open, setOpen] = useState<boolean>(true);
-  const onClickOptionHandler = (item: string) => {
-    const newArr = options.includes(item)
-      ? options.filter((option) => option !== item)
-      : options.concat(item);
-    setOptions(newArr);
+  const onClickOptionHandler = (item: string): void => {
+    const newArr = gameInput.genres.includes(item)
+      ? gameInput.genres.filter((option) => option !== item)
+      : gameInput.genres.concat(item);
+    setGameInput({...gameInput, genres: newArr});
   };
 
-  const getAllOptions = () => {
+  const getAllOptions = (): ReactNode[] | undefined => {
     if (!open) return;
     return data.map((item) => {
-      const fontWeight = options.includes(item) ? 'bold' : 'medium';
+      const fontWeight = gameInput.genres.includes(item) ? 'bold' : 'medium';
       return (
         <CustomListItem
-          key={item}
-          sx={{ py: 0, minHeight: 32 }}
-          onClick={() => onClickOptionHandler(item)}
           data-testid="list-item"
+          key={item}
+          onClick={() => onClickOptionHandler(item)}
+          sx={{ py: 0, minHeight: 32 }}
         >
-          {options.includes(item) && <SelectedBar />}
+          {gameInput.genres.includes(item) ? <SelectedBar /> : null}
           <ListItemText primary={item} primaryTypographyProps={{ fontSize: 14, fontWeight }} />
         </CustomListItem>
       );
@@ -56,11 +57,11 @@ const FilterSelect = ({ title, data, options, setOptions }: PropsType) => {
   return (
     <Box>
       <Box
-        onClick={() => setOpen(!open)}
-        sx={{ px: 0 }}
-        style={{ display: 'flex', cursor: 'pointer' }}
-        justifyContent="space-between"
         data-testid="filter-select-heading"
+        justifyContent="space-between"
+        onClick={() => setOpen(!open)}
+        style={{ display: 'flex', cursor: 'pointer' }}
+        sx={{ px: 0 }}
       >
         <Typography component="p">{title}</Typography>
         <KeyboardArrowDown
