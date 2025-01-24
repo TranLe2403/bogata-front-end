@@ -1,9 +1,10 @@
 import { jwtDecode } from 'jwt-decode';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { UserInfo } from '../../App';
 import { Button } from '@mui/material';
 import { useOutsideClick } from './useHandleClickOutside';
+import { useOpenGoogleSignIn } from './useOpenGoogleSignIn';
 
 interface PropTypes {
   email: string;
@@ -14,9 +15,7 @@ interface PropTypes {
 
 const UserContainerStyle = styled.div`
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: transparent;
+  right: 0;
   display: flex;
   align-items: self-start;
   justify-content: flex-end;
@@ -30,9 +29,12 @@ const SignInContainer = styled.div`
 `;
 
 const Login: FC<PropTypes> = ({ email, setUser, showLogin, setShowLogin }) => {
-  const ref = useOutsideClick(() => {
+  const hideSigninDiv = useOpenGoogleSignIn()
+  const ref = useRef<HTMLDivElement>(null);
+
+  const divRef = useOutsideClick(() => {
     setShowLogin(false);
-  });
+  }, ref);
 
   useEffect(() => {
     // @ts-expect-error
@@ -52,24 +54,16 @@ const Login: FC<PropTypes> = ({ email, setUser, showLogin, setShowLogin }) => {
     setShowLogin(false);
     const {email, name, picture}: Record<string, string> = jwtDecode(res.credential);
     setUser({ email, name, picture });
-    const getElem = document.getElementById('signInDiv');
-    if (!getElem) return;
-    getElem.hidden = true;
+    hideSigninDiv(true)
   };
 
   const handleSignOut = (): void => {
     setUser({ email: '', name: '', picture: '' });
-    const getElem = document.getElementById('signInDiv');
-    if (!getElem) return;
-    getElem.hidden = false;
-  };
-
-  const userClickHandler = (): void => {
-    setShowLogin(!showLogin);
+    hideSigninDiv(false)
   };
 
   return (
-    <UserContainerStyle onClick={userClickHandler} ref={ref}>
+    <UserContainerStyle ref={divRef}>
       <SignInContainer>
         {!email ? (
             <div id="signInDiv" />

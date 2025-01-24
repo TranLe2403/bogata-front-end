@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NewGameItem } from './components/NewGameItem';
 import { GameItem } from './types/GameType';
 import { GameItemModal } from './components/GameItemForm';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { FieldValues } from 'react-hook-form';
 import { getFullGameInfo } from './utils/getFullGameInfo';
 import Login from './components/Login';
@@ -27,16 +27,20 @@ export interface GameItemType {
   rating: number;
 }
 
-const UserDefaultImage = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background: red;
-`;
+const IMG_STYLES = {
+  borderRadius: 20,
+  width: 40,
+  height: 40,
+}
 
-const UserImage = styled.img`
-  border-radius: 20px;
-`;
+const UserDefaultImage = styled.div({
+  ...IMG_STYLES,
+  background: 'red',
+})
+
+const Logo = styled.img({
+  ...IMG_STYLES
+})
 
 type Genre =
   | 'Co-op'
@@ -60,7 +64,7 @@ export const App = (): JSX.Element => {
   const [gameItems, setGameItems] = useState<GameItem[]>([]);
 
   const [user, setUser] = useState<UserInfo>({ email: '', name: '', picture: '' });
-  const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 
   useEffect(() => {
     const setItems = async (): Promise<void> => {
@@ -84,32 +88,28 @@ export const App = (): JSX.Element => {
 
   const handleAddGame = (): void => setOpen(true)
 
-  const userClickHandler = (): void => setShowLogin(!showLogin);
+  const userClickHandler = (): void => setShowUserMenu(!showUserMenu);
 
   return (
     <>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Button onClick={handleAddGame} variant="contained">Add Game</Button>
         <div style={{position: 'relative' }}>
-          {user.picture === '' ? (
-            <UserDefaultImage onClick={userClickHandler} />
-          ) : (
-            <UserImage
-              src={user.picture}
-              alt={user.name}
-              width={40}
-              height={40}
-              onClick={userClickHandler}
-            />
-          )}
-          {showLogin ? (
+          <IconButton onClick={userClickHandler}>
+            {user.picture === '' ? (
+              <UserDefaultImage />
+            ) : (
+              <Logo src={user.picture} alt={user.name} />
+            )}
+          </IconButton>
+          {showUserMenu ? (
             <Login
               email={user.email}
-              showLogin={showLogin}
-              setShowLogin={setShowLogin}
+              showLogin={showUserMenu}
+              setShowLogin={setShowUserMenu}
               setUser={setUser}
             />
-          ): null}
+          ) : null}
         </div>
       </div>
       <GameItemModal 
