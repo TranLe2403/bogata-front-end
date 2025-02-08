@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { GameInputType } from '../types/GameType';
+import { GameFormType, GameInputType } from '../types/GameType';
 import { Box, Button, Modal } from '@mui/material';
 import { FieldValues, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
 import { FormInputText } from './FormComponents/FormInputText';
 import { SelectFormField } from './FormComponents/SelectFormField';
 
@@ -28,18 +28,36 @@ const DEFAULT_GAME_VALUE = {
   condition: '',  
 }
 
-const GameSchemaYup = yup.object({
-  name: yup.string().required('Name is required'),
-  minPlayer: yup.number().positive().integer().required('minplayer is required'),
-  maxPlayer: yup.number().positive().integer(),
-  description: yup.string(),
-  playDuration: yup.number().positive().integer().required('playDuration is required'),
-  minAge: yup.number().positive().integer().required('minAge is required'),
-  genres: yup.array().of(yup.string().required()),
-}).required()
+const schema: zod.ZodType<GameFormType> = zod.object({
+  name: zod.string({
+    required_error: "Name is required",
+    invalid_type_error: "Name must be a string"
+  }).nonempty(),
+  minPlayer: zod.number({
+    required_error: "Min player is required"
+  }).positive().int(),
+  maxPlayer: zod.number().positive().int(),
+  description: zod.string(),
+  playDuration: zod.number({
+    required_error: "Play duration is required",
+    invalid_type_error: "Play duration must be a number"
+  }).positive().int(),
+  minAge: zod.number({
+    required_error: "Min age is required"
+  }).positive().int(),
+  genres: zod.string().array().nonempty("Genres are required")
+})
+.refine((data) => data.minPlayer < data.maxPlayer, {
+  message: "Min players must be smaller than max player",
+  path: ["minPlayer"],
+})
+.refine((data) => data.maxPlayer > data.minPlayer, {
+  message: "Max players must be greater than min player",
+  path: ["maxPlayer"],
+});
 
 export const GameItemModal: FC<GameItemModalType> = ({ open, onClose, handleSubmitGame, gameInfo}) => {
-  const { handleSubmit, reset, control} = useForm({defaultValues: gameInfo ?? DEFAULT_GAME_VALUE, resolver: yupResolver(GameSchemaYup)})
+  const { register, handleSubmit, reset, control, formState: { errors } } = useForm({defaultValues: gameInfo ?? DEFAULT_GAME_VALUE, resolver: zodResolver(schema)})
 
   const onCancel = (): void => {
     reset()
@@ -74,12 +92,12 @@ export const GameItemModal: FC<GameItemModalType> = ({ open, onClose, handleSubm
           })}
           style={{display: 'flex', flexDirection: 'column', gap: 8}}
         >
-          <FormInputText name='name' control={control} label="Name: " sx={{ mb: 2 }} />
-          <FormInputText name='minPlayer' control={control} label="Min player: " sx={{ mb: 2 }} />
-          <FormInputText name='maxPlayer' control={control} label="Max player: " sx={{ mb: 2 }} />
-          <FormInputText name='description' control={control} label="description: " sx={{ mb: 2 }} />
-          <FormInputText name='playDuration' control={control} label="playDuration: " sx={{ mb: 2 }} />
-          <FormInputText name='minAge' control={control} label="minAge: " sx={{ mb: 2 }} />
+          <FormInputText register={register} name='name' error={errors.name} label="Name: " sx={{ mb: 2 }} />
+          <FormInputText register={register} valueAsNumber name='minPlayer' error={errors.minPlayer} label="Min player: " sx={{ mb: 2 }} />
+          <FormInputText register={register} valueAsNumber name='maxPlayer' error={errors.maxPlayer} label="Max player: " sx={{ mb: 2 }} />
+          <FormInputText register={register} name='description' error={errors.description} label="description: " sx={{ mb: 2 }} />
+          <FormInputText register={register} valueAsNumber name='playDuration' error={errors.playDuration} label="playDuration: " sx={{ mb: 2 }} />
+          <FormInputText register={register} valueAsNumber name='minAge' error={errors.minAge} label="minAge: " sx={{ mb: 2 }} />
 
           <SelectFormField control={control} />
           <Button onClick={onCancel}>Cancel</Button>

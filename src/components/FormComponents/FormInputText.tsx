@@ -1,32 +1,28 @@
-import { SxProps, TextField, Theme } from "@mui/material"
-import { FC } from "react";
-import { Controller } from "react-hook-form"
+import { SxProps, TextField, Theme } from '@mui/material';
+import { FC } from 'react';
+import { FieldError, UseFormRegister } from 'react-hook-form';
+import { GameFormType, GameInputType } from '../../types/GameType';
 
 interface FormInputProps {
-  name: string;
-  control: any;
+  name: keyof GameFormType;
   label: string;
-  sx?: SxProps<Theme>
+  register: UseFormRegister<GameInputType>;
+  error: FieldError | undefined;
+  sx?: SxProps<Theme>;
+  valueAsNumber?: boolean;
 }
 
-export const FormInputText: FC<FormInputProps> = ({name, control, label, sx}) => {
+export const FormInputText: FC<FormInputProps> = ({ name, label, register, error, sx, valueAsNumber }) => {
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={(renderProps) => (
-        <TextField
-          size="small"
-          onChange={renderProps.field.onChange}
-          value={renderProps.field.value}
-          fullWidth
-          label={label}
-          variant="outlined"
-          error={!!renderProps.fieldState.error ?? false}
-          helperText={renderProps.fieldState.error?.message ?? ''}
-          sx={sx}
-        />
-      )}
+    <TextField
+      size="small"
+      fullWidth
+      label={label}
+      variant="outlined"
+      error={!!error}
+      helperText={error?.message ?? ''}
+      sx={sx}
+      {...register(name, {valueAsNumber})}
     />
-  )
-}
+  );
+};
