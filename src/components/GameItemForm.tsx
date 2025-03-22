@@ -34,9 +34,12 @@ const schema: zod.ZodType<GameFormType> = zod.object({
     invalid_type_error: "Name must be a string"
   }).nonempty(),
   minPlayer: zod.number({
-    required_error: "Min player is required"
+    required_error: "Min player is required",
+    invalid_type_error: "Min player must be a number"
   }).positive().int(),
-  maxPlayer: zod.number().positive().int(),
+  maxPlayer: zod.number({
+    invalid_type_error: "Max player must be a number"
+  }).positive().int(),
   description: zod.string(),
   playDuration: zod.number({
     required_error: "Play duration is required",
@@ -45,16 +48,14 @@ const schema: zod.ZodType<GameFormType> = zod.object({
   minAge: zod.number({
     required_error: "Min age is required"
   }).positive().int(),
-  genres: zod.string().array().nonempty("Genres are required")
+  genres: zod.string({
+    required_error: "Something went wrong, please re-add the genres to try again",
+  }).array().nonempty("Genres are required")
 })
 .refine((data) => data.minPlayer < data.maxPlayer, {
   message: "Min players must be smaller than max player",
   path: ["minPlayer"],
 })
-.refine((data) => data.maxPlayer > data.minPlayer, {
-  message: "Max players must be greater than min player",
-  path: ["maxPlayer"],
-});
 
 export const GameItemModal: FC<GameItemModalType> = ({ open, onClose, handleSubmitGame, gameInfo}) => {
   const { register, handleSubmit, reset, control, formState: { errors } } = useForm({defaultValues: gameInfo ?? DEFAULT_GAME_VALUE, resolver: zodResolver(schema)})
