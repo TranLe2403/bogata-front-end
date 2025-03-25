@@ -46,7 +46,8 @@ const schema: zod.ZodType<GameFormType> = zod.object({
     invalid_type_error: "Play duration must be a number"
   }).positive().int(),
   minAge: zod.number({
-    required_error: "Min age is required"
+    required_error: "Min age is required",
+    invalid_type_error: "Min age must be a number"
   }).positive().int(),
   genres: zod.string({
     required_error: "Something went wrong, please re-add the genres to try again",
