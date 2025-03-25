@@ -51,7 +51,7 @@ const schema: zod.ZodType<GameFormType> = zod.object({
   }).positive().int(),
   genres: zod.string({
     required_error: "Something went wrong, please re-add the genres to try again",
-  }).array().nonempty("Genres are required")
+  }).array()
 })
 .refine((data) => data.minPlayer < data.maxPlayer, {
   message: "Min players must be smaller than max player",
