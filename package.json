@@ -24,7 +24,7 @@
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.14",
     "web-vitals": "^2.1.4",
-    "yup": "^1.6.1"
+    "zod": "^3.24.1"
   },
   "scripts": {
     "start": "react-scripts start",
