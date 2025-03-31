@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
 const SliderContainer = styled.div`
@@ -43,7 +43,7 @@ const ValueWrapper = styled.div`
   min-width: 32px;
 `;
 
-const CustomSlider = ({ min, max }: { min: number; max: number }) => {
+const CustomSlider: FC<{ min: number; max: number }> = ({ min, max }) => {
   const [fromValue, setFromValue] = useState<number>(0);
   const [toValue, setToValue] = useState<number>(0);
   const [dragging, setDragging] = useState<boolean>(false);
@@ -80,17 +80,17 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     return fromThumbEl.current;
   };
 
-  const setStartAndEndValues = () => {
+  const setStartAndEndValues = (): void => {
     if (trackEl.current === null) return;
     const { width, left } = (trackEl.current as HTMLDivElement).getBoundingClientRect();
     setTrackState({ ...trackState, startX: left, endX: width + left });
   };
 
-  const valueBetweenMinMax = (value: number) => {
+  const valueBetweenMinMax = (value: number): number => {
     return Math.min(Math.max(value, min), max);
   };
 
-  const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const startDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.preventDefault();
     e.stopPropagation();
     const target = e.target as HTMLDivElement;
@@ -113,13 +113,13 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     setDragging(true);
   };
 
-  const getXPercentage = (x: number) => {
+  const getXPercentage = (x: number): number => {
     const { startX, endX } = trackState;
     const value = (100 * (x - startX)) / (endX - startX);
     return valueBetweenMinMax(value);
   };
 
-  const onMove = (e: MouseEvent) => {
+  const onMove = (e: MouseEvent): void => {
     if (!dragging) return;
     const xMouseEventValue = e.x ?? e.clientX ?? 0;
     const percent = getXPercentage(xMouseEventValue);
@@ -130,24 +130,24 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     setFromValue(topSide ? pivotValue : value);
   };
 
-  const getValueFromPercentage = (percent: number) => {
+  const getValueFromPercentage = (percent: number): number => {
     const value = Math.abs(max - min) * (percent / 100) + min;
     return valueBetweenMinMax(value);
   };
 
-  const onMoveEnd = () => {
+  const onMoveEnd = (): void => {
     setDragging(false);
   };
 
-  const setValue = (isFrom: boolean) => {
+  const setValue = (isFrom: boolean): number => {
     return valueBetweenMinMax((isFrom ? fromValue : toValue) ?? min);
   };
 
-  const getBarPercentage = (value: number) => {
+  const getBarPercentage = (value: number): number => {
     return (100 * (value - min)) / Math.abs(max - min);
   };
 
-  const onClickHandler = (e: React.MouseEvent<HTMLElement>) => {
+  const onClickHandler = (e: React.MouseEvent<HTMLElement>): void => {
     if (dragging) return;
     setStartAndEndValues();
     const value = getValueFromPercentage(getXPercentage(e.clientX ?? 0));
@@ -156,29 +156,29 @@ const CustomSlider = ({ min, max }: { min: number; max: number }) => {
     setFromValue(topSide ? fromValue : value);
   };
 
-  const renderValues = (value: number) => <ValueWrapper>{value.toFixed()}</ValueWrapper>;
+  const renderValues = (value: number): ReactNode => <ValueWrapper>{value.toFixed()}</ValueWrapper>;
 
   return (
     <SliderContainer>
       {renderValues(fromValue)}
-      <SliderTrack id="track" ref={trackEl} onClick={onClickHandler}>
+      <SliderTrack id="track" onClick={onClickHandler} ref={trackEl}>
         <SliderBar
           style={{
             right: `${100 - getBarPercentage(setValue(false))}%`,
             left: `${getBarPercentage(setValue(true))}%`
           }}
-        ></SliderBar>
-        <SliderThumb
-          data-testid="slider-selector"
-          ref={toThumbEl}
-          style={{ left: `${getBarPercentage(setValue(false))}%` }}
-          onMouseDown={startDrag}
         />
         <SliderThumb
           data-testid="slider-selector"
+          onMouseDown={startDrag}
+          ref={toThumbEl}
+          style={{ left: `${getBarPercentage(setValue(false))}%` }}
+        />
+        <SliderThumb
+          data-testid="slider-selector"
+          onMouseDown={startDrag}
           ref={fromThumbEl}
           style={{ left: `${getBarPercentage(setValue(true))}%` }}
-          onMouseDown={startDrag}
         />
       </SliderTrack>
       {renderValues(toValue)}
